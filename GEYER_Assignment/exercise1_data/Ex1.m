@@ -148,9 +148,9 @@ for nbr=1:nbr_data
     current_foot_flat_start = FF.foot_flat_start{nbr};
     current_foot_flat_end = FF.foot_flat_end{nbr};
     
-    for i = 1: length(current_foot_flat_start) -1
+    for i = 1: length(current_foot_flat_start)/2 -1
         
-        FF.(double_stance_durations{nbr})(i) = current_foot_flat_end(i) - current_foot_flat_start(i);
+        FF.(double_stance_durations{nbr})(i) = ((current_foot_flat_end(i) - current_foot_flat_start(i)) + (current_foot_flat_end(i+1) - current_foot_flat_start(i+1))) ;
         
     end
 end
@@ -178,13 +178,16 @@ Results.mean_stance_over_swing{nbr} = mean(current_stance_over_swing);
 Results.std_stance_over_swing{nbr} = std(current_stance_over_swing);
 
 % % Swing / Double Stance
-% current_swing_over_double_stance_left = FF.(swings_durations_left{nbr})./FF.(double_stance_durations{nbr});
-% current_swing_over_double_stance_right = FF.(swings_durations_right{nbr})./FF.(double_stance_durations{nbr});
-% current_swing_over_double_stance =[current_swing_over_double_stance_left,current_swing_over_double_stance_right];
-% % Mean
-% Results.mean_swing_over_double_stance{nbr} = mean(current_swing_over_double_stance);
-% % Std
-% Results.std_swing_over_double_stance{nbr} = std(current_swing_over_double_stance);
+min_left = min(length(FF.(swings_durations_left{nbr})),length(FF.(double_stance_durations{nbr})));
+min_right = min(length(FF.(swings_durations_right{nbr})),length(FF.(double_stance_durations{nbr})));
+
+current_swing_over_double_stance_left = FF.(swings_durations_left{nbr})(1:min_left)./FF.(double_stance_durations{nbr})(1:min_left);
+current_swing_over_double_stance_right = FF.(swings_durations_right{nbr})(1:min_right)./FF.(double_stance_durations{nbr})(1:min_right);
+current_swing_over_double_stance =[current_swing_over_double_stance_left,current_swing_over_double_stance_right];
+% Mean
+Results.mean_swing_over_double_stance{nbr} = mean(current_swing_over_double_stance);
+% Std
+Results.std_swing_over_double_stance{nbr} = std(current_swing_over_double_stance);
  end
 
 %% Evaluate the walking speed
