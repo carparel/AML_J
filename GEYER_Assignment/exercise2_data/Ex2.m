@@ -96,3 +96,28 @@ for i = 1:length(HS_right)-1
         
     end
 end
+% Extracting torques
+torques = {'AnkleTorque','KneeTorque','HipTorque'};
+
+for torque = 1: length(torques)
+    struct_torques.left.whole.(torques{torque}) = struct_mRFX.(['L' (torques{torque})]);
+end
+for i = 1:length(HS_left)-1
+    for torque  = 1: length(torques)
+        old_activity = struct_torques.left.whole.(torques{torque});
+        struct_torques.left.parsed.(torques{torque}){i}= old_activity(HS_left(i:i+1));
+        
+    end
+end
+
+% Right foot
+for torque  = 1: length(torques)
+    struct_torques.right.whole.(torques{torque}) = struct_mRFX.(['R' (torques{torque})]);
+end
+for i = 1:length(HS_right)-1
+    for torque = 1: length(torques)
+        old_activity = struct_torques.right.whole.(torques{torque});
+        struct_torques.right.parsed.(torques{torque}){i}= old_activity(HS_right(i:i+1));
+        
+    end
+end
