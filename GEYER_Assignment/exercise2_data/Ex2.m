@@ -50,7 +50,7 @@ end
 for i = 1:length(HS_left)-1
     for muscle = 1: length(muscles)
         old_activity = struct_muscles.left.whole.(muscles{muscle});
-        struct_muscles.left.parsed.(muscles{muscle}){i}= old_activity(HS_left(i:i+1));
+        struct_muscles.left.parsed.(muscles{muscle}){i}= old_activity(HS_left(i):HS_left(i+1));
         
     end
 end
@@ -64,7 +64,7 @@ end
 for i = 1:length(HS_right)-1
     for muscle = 1: length(muscles)
         old_activity = struct_muscles.right.whole.(muscles{muscle});
-        struct_muscles.right.parsed.(muscles{muscle}){i} = old_activity(HS_right(i:i+1));
+        struct_muscles.right.parsed.(muscles{muscle}){i} = old_activity(HS_right(i):HS_right(i+1));
     end
 end
 
@@ -80,7 +80,7 @@ end
 for i = 1:length(HS_left)-1
     for angle = 1: length(angles)
         old_activity = struct_angles.left.whole.(angles{angle});
-        struct_angles.left.parsed.(angles{angle}){i}= old_activity(HS_left(i:i+1));
+        struct_angles.left.parsed.(angles{angle}){i}= old_activity(HS_left(i):HS_left(i+1));
         
     end
 end
@@ -92,7 +92,7 @@ end
 for i = 1:length(HS_right)-1
     for angle = 1: length(angles)
         old_activity = struct_angles.right.whole.(angles{angle});
-        struct_angles.right.parsed.(angles{angle}){i}= old_activity(HS_right(i:i+1));
+        struct_angles.right.parsed.(angles{angle}){i}= old_activity(HS_right(i):HS_right(i+1));
         
     end
 end
@@ -105,7 +105,7 @@ end
 for i = 1:length(HS_left)-1
     for torque  = 1: length(torques)
         old_activity = struct_torques.left.whole.(torques{torque});
-        struct_torques.left.parsed.(torques{torque}){i}= old_activity(HS_left(i:i+1));
+        struct_torques.left.parsed.(torques{torque}){i}= old_activity(HS_left(i):HS_left(i+1));
         
     end
 end
@@ -117,7 +117,7 @@ end
 for i = 1:length(HS_right)-1
     for torque = 1: length(torques)
         old_activity = struct_torques.right.whole.(torques{torque});
-        struct_torques.right.parsed.(torques{torque}){i}= old_activity(HS_right(i:i+1));
+        struct_torques.right.parsed.(torques{torque}){i}= old_activity(HS_right(i):HS_right(i+1));
         
     end
 end
