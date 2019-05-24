@@ -7,7 +7,7 @@ clear all;
 close all;
 %% Run simulation
 % Uncomment only if your really want to re-do the simulation!
-% init();
+%init();
 
 % After running init simulation
 %struct_mRFX = mRFX;
@@ -68,6 +68,7 @@ for i = 1:length(HS_right)-1
     end
 end
 
+
 %% Extract joint angles and joint torques per stride
 
 % Extracting angles
@@ -121,3 +122,215 @@ for i = 1:length(HS_right)-1
         
     end
 end
+
+%% Muscles activity-interpolation
+nbr_points = 1000; % for interpolation
+% Right foot
+for i = 1:length(HS_right)-1
+    for muscle = 1: length(muscles)
+        current_signal = struct_muscles.right.parsed.(muscles{muscle}){i};
+        interpolated_signal = interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
+        interpolated_signal_per.right.(muscles{muscle}){i} = interpolated_signal /nbr_points * 100; % to have gait cycles
+    end
+end
+% Left foot
+for i = 1:length(HS_left)-1
+    for muscle = 1: length(muscles)
+        current_signal = struct_muscles.left.parsed.(muscles{muscle}){i};
+        interpolated_signal= interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
+        interpolated_signal_per.left.(muscles{muscle}){i} = interpolated_signal/nbr_points * 100; % to have gait cycles
+    end
+end
+
+% Meand and std
+% Right
+for i = 1:length(HS_right)-1
+    for muscle = 1:length(muscles)
+        muscles_matrix_right.(muscles{muscle})(i,:) = interpolated_signal_per.right.(muscles{muscle}){i};
+    end
+end
+for muscle = 1:length(muscles)
+    mean_muscles_right.(muscles{muscle}) = mean(muscles_matrix_right.(muscles{muscle}));
+    std_muscles_right.(muscles{muscle}) = std(muscles_matrix_right.(muscles{muscle}));
+end
+% Left
+for i = 1:length(HS_left)-1
+    for muscle = 1:length(muscles)
+        muscles_matrix_left.(muscles{muscle})(i,:) = interpolated_signal_per.left.(muscles{muscle}){i};
+    end
+end
+for muscle = 1:length(muscles)
+    mean_muscles_left.(muscles{muscle}) = mean(muscles_matrix_left.(muscles{muscle}));
+    std_muscles_left.(muscles{muscle}) = std(muscles_matrix_left.(muscles{muscle}));
+end
+
+% Plotting
+% Right muscles
+for muscle = 1: length(muscles)
+    indices = 1:1:length(mean_muscles_right.(muscles{muscle}));
+    figure;
+    plot(mean_muscles_right.(muscles{muscle}),'k','LineWidth',1.2);
+    fill_x = [indices,fliplr(indices)];
+    fill_y = [mean_muscles_right.(muscles{muscle}) - std_muscles_right.(muscles{muscle}),fliplr((mean_muscles_right.(muscles{muscle}) + std_muscles_right.(muscles{muscle})))];
+    patch(fill_x,fill_y,'r','EdgeColor','none');
+    alpha(.1)
+    ax = gca;
+    ax.FontSize = 15;
+    
+    legend('Average','Std');
+end
+% Left muscles
+for muscle = 1: length(muscles)
+    indices = 1:1:length(mean_muscles_left.(muscles{muscle}));
+    figure;
+    plot(mean_muscles_left.(muscles{muscle}),'k','LineWidth',1.2);
+    fill_x = [indices,fliplr(indices)];
+    fill_y = [mean_muscles_left.(muscles{muscle}) - std_muscles_left.(muscles{muscle}),fliplr((mean_muscles_left.(muscles{muscle}) + std_muscles_left.(muscles{muscle})))];
+    patch(fill_x,fill_y,'r','EdgeColor','none');
+    alpha(.1)
+    ax = gca;
+    ax.FontSize = 15;
+    
+    legend('Average','Std');
+end
+
+%% Angles-interpolation
+% Right foot
+for i = 1:length(HS_right)-1
+    for angle = 1: length(angles)
+        current_signal = struct_angles.right.parsed.(angles{angle}){i};
+        interpolated_signal = interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
+        interpolated_signal_per.right.(angles{angle}){i} = interpolated_signal /nbr_points * 100; % to have gait cycles
+    end
+end
+% Left foot
+for i = 1:length(HS_left)-1
+    for angle = 1: length(angles)
+        current_signal = struct_angles.left.parsed.(angles{angle}){i};
+        interpolated_signal = interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
+        interpolated_signal_per.left.(angles{angle}){i} = interpolated_signal /nbr_points * 100; % to have gait cycles
+    end
+end
+% Meand and std
+% Right
+for i = 1:length(HS_right)-1
+    for angle = 1: length(angles)
+        angles_matrix_right.(angles{angle})(i,:) = interpolated_signal_per.right.(angles{angle}){i};
+    end
+end
+for angle = 1: length(angles)
+    mean_angles_right.(angles{angle}) = mean(angles_matrix_right.(angles{angle}));
+    std_angles_right.(angles{angle}) = std(angles_matrix_right.(angles{angle}));
+end
+% Left
+for i = 1:length(HS_left)-1
+    for angle = 1: length(angles)
+        angles_matrix_left.(angles{angle})(i,:) = interpolated_signal_per.left.(angles{angle}){i};
+    end
+end
+for angle = 1: length(angles)
+    mean_angles_left.(angles{angle}) = mean(angles_matrix_left.(angles{angle}));
+    std_angles_left.(angles{angle}) = std(angles_matrix_left.(angles{angle}));
+end
+% Plotting
+% Right
+for angle = 1: length(angles)
+    indices = 1:1:length(mean_angles_right.(angles{angle}));
+    figure;
+    plot(mean_angles_right.(angles{angle}),'k','LineWidth',1.2);
+    fill_x = [indices,fliplr(indices)];
+    fill_y = [mean_angles_right.(angles{angle}) - std_angles_right.(angles{angle}),fliplr((mean_angles_right.(angles{angle}) + std_angles_right.(angles{angle})))];
+    patch(fill_x,fill_y,'r','EdgeColor','none');
+    alpha(.1)
+    ax = gca;
+    ax.FontSize = 15;
+    
+    legend('Average','Std');
+end
+% Left
+for angle = 1: length(angles)
+    indices = 1:1:length(mean_angles_left.(angles{angle}));
+    figure;
+    plot(mean_angles_left.(angles{angle}),'k','LineWidth',1.2);
+    fill_x = [indices,fliplr(indices)];
+    fill_y = [mean_angles_left.(angles{angle}) - std_angles_left.(angles{angle}),fliplr((mean_angles_left.(angles{angle}) + std_angles_left.(angles{angle})))];
+    patch(fill_x,fill_y,'r','EdgeColor','none');
+    alpha(.1)
+    ax = gca;
+    ax.FontSize = 15;
+    
+    legend('Average','Std');
+end
+%% Torques-interpolation
+% Right foot
+for i = 1:length(HS_right)-1
+    for torque= 1: length(torques)
+        current_signal = struct_torques.right.parsed.(torques{torque}){i};
+        interpolated_signal = interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
+        interpolated_signal_per.right.(torques{torque}){i} = interpolated_signal /nbr_points * 100; % to have gait cycles
+    end
+end
+% Left foot
+for i = 1:length(HS_left)-1
+    for torque= 1: length(torques)
+        current_signal = struct_torques.left.parsed.(torques{torque}){i};
+        interpolated_signal = interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
+        interpolated_signal_per.left.(torques{torque}){i} = interpolated_signal /nbr_points * 100; % to have gait cycles
+    end
+end
+% Meand and std
+% Right
+for i = 1:length(HS_right)-1
+    for torque= 1: length(torques)
+        torques_matrix_right.(torques{torque})(i,:) = interpolated_signal_per.right.(torques{torque}){i};
+    end
+end
+for torque= 1: length(torques)
+    mean_torques_right.(torques{torque}) = mean(torques_matrix_right.(torques{torque}));
+    std_torques_right.(torques{torque}) = std(torques_matrix_right.(torques{torque}));
+end
+% Left
+for i = 1:length(HS_left)-1
+    for torque= 1: length(torques)
+        torques_matrix_left.(torques{torque})(i,:) = interpolated_signal_per.left.(torques{torque}){i};
+    end
+end
+for torque= 1: length(torques)
+    mean_torques_left.(torques{torque}) = mean(torques_matrix_left.(torques{torque}));
+    std_torques_left.(torques{torque}) = std(torques_matrix_left.(torques{torque}));
+end
+
+% Plotting
+% Right
+for torque= 1: length(torques)
+    indices = 1:1:length(mean_torques_right.(torques{torque}));
+    figure;
+    plot(mean_torques_right.(torques{torque}),'k','LineWidth',1.2);
+    fill_x = [indices,fliplr(indices)];
+    fill_y = [mean_torques_right.(torques{torque}) - std_torques_right.(torques{torque}),fliplr((mean_torques_right.(torques{torque}) + std_torques_right.(torques{torque})))];
+    patch(fill_x,fill_y,'r','EdgeColor','none');
+    alpha(.1)
+    ax = gca;
+    ax.FontSize = 15;
+    
+    legend('Average','Std');
+end
+% Left
+for torque= 1: length(torques)
+    indices = 1:1:length(mean_torques_left.(torques{torque}));
+    figure;
+    plot(mean_torques_left.(torques{torque}),'k','LineWidth',1.2);
+    fill_x = [indices,fliplr(indices)];
+    fill_y = [mean_torques_left.(torques{torque}) - std_torques_left.(torques{torque}),fliplr((mean_torques_left.(torques{torque}) + std_torques_left.(torques{torque})))];
+    patch(fill_x,fill_y,'r','EdgeColor','none');
+    alpha(.1)
+    ax = gca;
+    ax.FontSize = 15;
+    
+    legend('Average','Std');
+end
+
+
+
+
+
