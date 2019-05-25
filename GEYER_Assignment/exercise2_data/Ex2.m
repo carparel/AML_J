@@ -187,6 +187,7 @@ for muscle = 1: length(muscles)
     ylabel('Activity');
     legend('Average right muscle','Std right muscle','Average left muscle','Std left muscle');
     title({'Average activity for ',num2str(muscles{muscle})});
+    set(gcf,'Position',[0 0 1920 980]);
     saveas(gcf,['Activity', num2str(muscles{muscle})],'png');
 end
 %% Angles-interpolation
@@ -251,6 +252,7 @@ for angle = 1: length(angles)
     ylabel('Activity');
     title({'Average activity for',num2str(angles{angle})});
     legend('Average right angle','Std right angle','Average left angle','Std left angle');
+    set(gcf,'Position',[0 0 1920 980]);
     saveas(gcf,['Activity', num2str(angles{angle})],'png');
 end
 
@@ -317,6 +319,7 @@ for torque= 1: length(torques)
     ylabel('Activity');
     title({'Average activity for right',num2str(torques{torque})});
     legend('Average right torque','Std right torque','Average left torque','Std left torque');
+    set(gcf,'Position',[0 0 1920 980]);
     saveas(gcf,['Activity', num2str(torques{torque})],'png');
 end
 
