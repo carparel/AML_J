@@ -164,7 +164,8 @@ for muscle = 1:length(muscles)
     std_muscles_left.(muscles{muscle}) = std(muscles_matrix_left.(muscles{muscle}));
 end
 
-% Plotting
+%% Plotting Muscles
+
 % Right muscles
 for muscle = 1: length(muscles)
     indices = 1:1:length(mean_muscles_right.(muscles{muscle}));
@@ -176,8 +177,9 @@ for muscle = 1: length(muscles)
     alpha(.1)
     ax = gca;
     ax.FontSize = 15;
-    
     legend('Average','Std');
+    title({'Average activity for right',num2str(muscles{muscle})});
+    saveas(gcf,['Activity_right', num2str(muscles{muscle})],'png');
 end
 % Left muscles
 for muscle = 1: length(muscles)
@@ -192,6 +194,8 @@ for muscle = 1: length(muscles)
     ax.FontSize = 15;
     
     legend('Average','Std');
+    title({'Average activity for left ',num2str(muscles{muscle})});
+    saveas(gcf,['Activity_left', num2str(muscles{muscle})],'png');
 end
 
 %% Angles-interpolation
@@ -232,7 +236,7 @@ for angle = 1: length(angles)
     mean_angles_left.(angles{angle}) = mean(angles_matrix_left.(angles{angle}));
     std_angles_left.(angles{angle}) = std(angles_matrix_left.(angles{angle}));
 end
-% Plotting
+%% Plotting
 % Right
 for angle = 1: length(angles)
     indices = 1:1:length(mean_angles_right.(angles{angle}));
@@ -244,8 +248,9 @@ for angle = 1: length(angles)
     alpha(.1)
     ax = gca;
     ax.FontSize = 15;
-    
+    title({'Average activity for right',num2str(angles{angle})});
     legend('Average','Std');
+    saveas(gcf,['Activity_right', num2str(angles{angle})],'png');
 end
 % Left
 for angle = 1: length(angles)
@@ -258,8 +263,9 @@ for angle = 1: length(angles)
     alpha(.1)
     ax = gca;
     ax.FontSize = 15;
-    
+    title({'Average activity for left',num2str(angles{angle})});
     legend('Average','Std');
+     saveas(gcf,['Activity_left', num2str(angles{angle})],'png');
 end
 %% Torques-interpolation
 % Right foot
@@ -300,7 +306,7 @@ for torque= 1: length(torques)
     std_torques_left.(torques{torque}) = std(torques_matrix_left.(torques{torque}));
 end
 
-% Plotting
+%% Plotting
 % Right
 for torque= 1: length(torques)
     indices = 1:1:length(mean_torques_right.(torques{torque}));
@@ -312,8 +318,9 @@ for torque= 1: length(torques)
     alpha(.1)
     ax = gca;
     ax.FontSize = 15;
-    
+    title({'Average activity for right',num2str(torques{torque})});
     legend('Average','Std');
+    saveas(gcf,['Activity_right', num2str(torques{torque})],'png');
 end
 % Left
 for torque= 1: length(torques)
@@ -326,8 +333,9 @@ for torque= 1: length(torques)
     alpha(.1)
     ax = gca;
     ax.FontSize = 15;
-    
+    title({'Average activity for left',num2str(torques{torque})});
     legend('Average','Std');
+    saveas(gcf,['Activity_left', num2str(torques{torque})],'png');
 end
 
 
