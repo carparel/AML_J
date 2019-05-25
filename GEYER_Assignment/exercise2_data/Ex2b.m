@@ -10,24 +10,24 @@ close all;
 nbr_cond = 8;
 
 % LOADING HAM MUSCLES with 4 conditions
-a = load('struct_mRFX_HF_asymetric_feedback.mat');
-struct.HAM.asymetric_f = a.struct_mRFX_HF_asymetric_feedback;
-b = load('struct_mRFX_HF_asymetric_stimulation.mat');
-struct.HAM.asymetric_s = b.struct_mRFX_HF_asymetric_stimulation;
-c = load('struct_mRFX_HF_symetric_feedback.mat');
-struct.HAM.symetric_f = c.struct_mRFX_HF_symetric_feedback;
-d = load('struct_mRFX_HF_symetric_stimulation.mat');
-struct.HAM.symetric_s = d.struct_mRFX_HF_symetric_stimulation;
+a = load('struct_mRFX_HAM_asymetric_feedback.mat');
+struct.HAM.asymetric_f = a.struct_mRFX_HAM_asymetric_feedback;
+b = load('struct_mRFX_HAM_asymetric_stimulation.mat');
+struct.HAM.asymetric_s = b.struct_mRFX_HAM_asymetric_stimulation;
+c = load('struct_mRFX_HAM_symetric_feedback.mat');
+struct.HAM.symetric_f = c.struct_mRFX_HAM_symetric_feedback;
+d = load('struct_mRFX_HAM_symetric_stimulation.mat');
+struct.HAM.symetric_s = d.struct_mRFX_HAM_symetric_stimulation;
 
 % LOADING TA MUSCLES with 4 conditions
 f = load('struct_mRFX_TA_asymetric_feedback.mat');
-struct.TA.asymetric_f = f.struct_mRFX_TA_asymetric;
-g = load('struct_mRFX_TA_asymetric_stim.mat');
-struct.TA.asymetric_s = g.struct_mRFX_TA_asymetric_stim;
+struct.TA.asymetric_f = f.struct_mRFX_TA_asymetric_feedback;
+g = load('struct_mRFX_TA_asymetric_stimulation.mat');
+struct.TA.asymetric_s = g.struct_mRFX_TA_asymetric_stimulation;
 h = load('struct_mRFX_TA_symetric_feedback.mat');
-struct.TA.symetric_f = h.struct_mRFX_TA_symetric;
-j = load('struct_mRFX_TA_symetric_stim.mat');
-struct.TA.symetric_s = j.struct_mRFX_TA_symetric_stim;
+struct.TA.symetric_f = h.struct_mRFX_TA_symetric_feedback;
+j = load('struct_mRFX_TA_symetric_stimulation.mat');
+struct.TA.symetric_s = j.struct_mRFX_TA_symetric_stimulation;
 
 
 %% Step length, Step duration + average speed
