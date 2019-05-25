@@ -78,6 +78,9 @@ stances_durations_right = {'stance_duration_right1','stance_duration_right2','st
 swings_durations_right = {'swing_duration_right1','swing_duration_right2','swing_duration_right3'};
 
 % Left foot
+FF.stride_duration_left_total = [];
+FF.stance_duration_left_total = [];
+FF.swing_duration_left_total = [];
 for nbr=1:nbr_data
     current_HS = FF.HS_left{nbr};
     current_TO = FF.TO_left{nbr};
@@ -93,11 +96,16 @@ for nbr=1:nbr_data
         % swing
         FF.(swings_durations_left{nbr})(i) = current_HS(i) - current_TO(i);
     end
-
-    
+    FF.stride_duration_left_total = [FF.stride_duration_left_total, FF.(strides_durations_left{nbr})];
+    FF.stance_duration_left_total = [FF.stance_duration_left_total, FF.(stances_durations_left{nbr})];
+    FF.swing_duration_left_total = [FF.swing_duration_left_total, FF.(swings_durations_left{nbr})];
 end
 
+
 % Right foot
+FF.stride_duration_right_total = [];
+FF.stance_duration_right_total = [];
+FF.swing_duration_right_total = [];
 for nbr=1:nbr_data
     current_HS = FF.HS_right{nbr};
     current_TO = FF.TO_right{nbr};
@@ -114,9 +122,21 @@ for nbr=1:nbr_data
         % swing
         FF.(swings_durations_right{nbr})(i) = current_HS(i) - current_TO(i);
     end
-
+    FF.stride_duration_right_total = [FF.stride_duration_right_total, FF.(strides_durations_right{nbr})];
+    FF.stance_duration_right_total = [FF.stance_duration_right_total, FF.(stances_durations_right{nbr})];
+    FF.swing_duration_right_total = [FF.swing_duration_right_total, FF.(swings_durations_right{nbr})];
     
 end
+
+% Both feet
+FF.stride_duration_total = [FF.stride_duration_left_total, FF.stride_duration_right_total];
+FF.stance_duration_total = [FF.stance_duration_left_total, FF.stance_duration_right_total];
+FF.swing_duration_total = [FF.swing_duration_left_total, FF.swing_duration_right_total];
+
+FF.mean_stride_duration = mean(FF.stride_duration_total);
+FF.mean_stance_duration = mean(FF.stance_duration_total);
+FF.mean_swing_duration = mean(FF.swing_duration_total);
+
 %% Double stance
 
 FF.foot_flat_start{1} = [];
@@ -144,51 +164,39 @@ for nbr=1:nbr_data
         end
     end
 end 
+FF.double_stance_duration_total = [];
 for nbr=1:nbr_data
     current_foot_flat_start = FF.foot_flat_start{nbr};
     current_foot_flat_end = FF.foot_flat_end{nbr};
     
     for i = 1: length(current_foot_flat_start)/2 -1
-        
-        FF.(double_stance_durations{nbr})(i) = ((current_foot_flat_end(i) - current_foot_flat_start(i)) + (current_foot_flat_end(i+1) - current_foot_flat_start(i+1))) ;
-        
+        FF.(double_stance_durations{nbr})(i) = ((current_foot_flat_end(i) - current_foot_flat_start(i)) + (current_foot_flat_end(i+1) - current_foot_flat_start(i+1))) ;      
     end
+    FF.double_stance_duration_total = [FF.double_stance_duration_total, FF.(double_stance_durations{nbr})];
 end
+FF.double_stance_duration_total = [FF.double_stance_duration_total, FF.double_stance_duration_total]; %vector is doubled since it contains double stance durations for left and right feet
+FF.mean_double_stance_duration = mean(FF.double_stance_duration_total);
+
+
 %% Calculate the average proportions
 
+Result.mean_stride_over_stance = FF.mean_stride_duration/FF.mean_stance_duration;
+Result.mean_stance_over_swing = FF.mean_stance_duration/FF.mean_swing_duration;
+Result.mean_swing_over_double_stance = FF.mean_swing_duration/FF.mean_double_stance_duration;
 
-for nbr=1:nbr_data
-    
-% Gait cycle/ Stance
-current_stride_over_stance_left = FF.(strides_durations_left{nbr})./FF.(stances_durations_left{nbr});
-current_stride_over_stance_right = FF.(strides_durations_right{nbr})./FF.(stances_durations_right{nbr});
-current_stride_over_stance = [current_stride_over_stance_left,current_stride_over_stance_right];
-% Mean
-Results.mean_stride_over_stance{nbr} = mean(current_stride_over_stance);
-% Std
-Results.std_stride_over_stance{nbr} = std(current_stride_over_stance);
+Result.std_stride_over_stance = std(FF.stride_duration_total./FF.stance_duration_total);
+Result.std_stance_over_swing = std(FF.stance_duration_total./FF.swing_duration_total);
 
-% Stance/ Swing
-current_stance_over_swing_left = FF.(stances_durations_left{nbr})./FF.(swings_durations_left{nbr});
-current_stance_over_swing_right = FF.(stances_durations_right{nbr})./FF.(swings_durations_right{nbr});
-current_stance_over_swing = [current_stance_over_swing_left,current_stance_over_swing_right];
-% Mean
-Results.mean_stance_over_swing{nbr} = mean(current_stance_over_swing);
-% Std
-Results.std_stance_over_swing{nbr} = std(current_stance_over_swing);
+Min = min(length(FF.swing_duration_total),length(FF.double_stance_duration_total));
+Result.std_swing_over_double_stance = std(FF.swing_duration_total(1:Min)./FF.double_stance_duration_total(1:Min));
 
-% % Swing / Double Stance
-min_left = min(length(FF.(swings_durations_left{nbr})),length(FF.(double_stance_durations{nbr})));
-min_right = min(length(FF.(swings_durations_right{nbr})),length(FF.(double_stance_durations{nbr})));
-
-current_swing_over_double_stance_left = FF.(swings_durations_left{nbr})(1:min_left)./FF.(double_stance_durations{nbr})(1:min_left);
-current_swing_over_double_stance_right = FF.(swings_durations_right{nbr})(1:min_right)./FF.(double_stance_durations{nbr})(1:min_right);
-current_swing_over_double_stance =[current_swing_over_double_stance_left,current_swing_over_double_stance_right];
-% Mean
-Results.mean_swing_over_double_stance{nbr} = mean(current_swing_over_double_stance);
-% Std
-Results.std_swing_over_double_stance{nbr} = std(current_swing_over_double_stance);
- end
+errorbar([Result.mean_stride_over_stance,Result.mean_stance_over_swing,Result.mean_swing_over_double_stance],[Result.std_stride_over_stance,Result.std_stance_over_swing,Result.std_swing_over_double_stance],'ko');
+hold on
+plot(linspace(0,4,20), ((1+sqrt(5))/2)*ones(1,20), '--r');
+axis([0, 4, 1, 2]);
+xticks([1 2 3]);
+xticklabels({'Stride/Stance','Stance/Swing','Swing/Double stance'});
+set(gca, 'YTick', unique([((1+sqrt(5))/2), get(gca, 'YTick')]));
 
 %% Evaluate the walking speed
 sample_freq = 100; % 100 Hz
@@ -196,7 +204,6 @@ sample_freq = 100; % 100 Hz
 alpha = 0.85; 
 beta = 0.5;
 for nbr=1:nbr_data
-    
     walking_speed_left{nbr} =  ((mean(FF.(strides_freqs_left{nbr}))* sample_freq)./alpha).^(1/beta);
     walking_speed_right{nbr} =  ((mean(FF.(strides_freqs_right{nbr}))* sample_freq)./alpha).^(1/beta);
 end
@@ -221,10 +228,10 @@ YMIN = 0;
 YMAX = 3200;
 figure(1);
 %plot(first_GRF1(:,2));
-plot(GRF2(:,2));
+plot(GRF1(:,2));
 hold on;
-plot(GRF3(:,2));
-legend('2','3');
+plot(GRF2(:,2));
+legend('1','2');
 axis([XMIN XMAX YMIN YMAX])
 
 FFb.foot_falls1 = data_to_compare1.data1.footfall.data;
