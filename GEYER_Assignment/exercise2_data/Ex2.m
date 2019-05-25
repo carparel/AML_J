@@ -182,12 +182,12 @@ for muscle = 1: length(muscles)
     alpha(.1)
     
     ax = gca;
-    ax.FontSize = 24;
-    xlabel('% Gait cycle');
+    ax.FontSize = 40;
+    xlabel('% Stride');
     ylabel('Activity');
     legend('Average right muscle','Std right muscle','Average left muscle','Std left muscle');
     title({'Average activity for ',num2str(muscles{muscle})});
-    set(gcf,'Position',[0 0 1920 980]);
+    set(gcf,'Position',[0 0 1600 800]);
     saveas(gcf,['Activity', num2str(muscles{muscle})],'png');
 end
 %% Angles-interpolation
@@ -196,7 +196,7 @@ for i = 1:length(HS_right)-1
     for angle = 1: length(angles)
         current_signal = struct_angles.right.parsed.(angles{angle}){i};
         interpolated_signal = interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
-        interpolated_signal_per.right.(angles{angle}){i} = interpolated_signal;
+        interpolated_signal_per.right.(angles{angle}){i} = rad2deg(interpolated_signal);
     end
 end
 % Left foot
@@ -204,7 +204,7 @@ for i = 1:length(HS_left)-1
     for angle = 1: length(angles)
         current_signal = struct_angles.left.parsed.(angles{angle}){i};
         interpolated_signal = interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
-        interpolated_signal_per.left.(angles{angle}){i} = interpolated_signal;
+        interpolated_signal_per.left.(angles{angle}){i} = rad2deg(interpolated_signal);
     end
 end
 % Meand and std
@@ -247,12 +247,12 @@ for angle = 1: length(angles)
     patch(fill_x,fill_y,'b','EdgeColor','none');
     alpha(.1)
     ax = gca;
-    ax.FontSize = 24;
-    xlabel('% Gait cycle');
-    ylabel('Activity');
+    ax.FontSize = 40;
+    xlabel('% Stride');
+    ylabel('Degrees');
     title({'Average activity for',num2str(angles{angle})});
-    legend('Average right angle','Std right angle','Average left angle','Std left angle');
-    set(gcf,'Position',[0 0 1920 980]);
+    legend('Average right angle','Std right angle','Average left angle','Std left angle','Location','Best');
+    set(gcf,'Position',[0 0 1600 800]);
     saveas(gcf,['Activity', num2str(angles{angle})],'png');
 end
 
@@ -314,12 +314,12 @@ for torque= 1: length(torques)
     patch(fill_x,fill_y,'b','EdgeColor','none');
     alpha(.1)
     ax = gca;
-    ax.FontSize = 24;
-    xlabel('% Gait cycle');
-    ylabel('Activity');
-    title({'Average activity for right',num2str(torques{torque})});
+    ax.FontSize = 40;
+    xlabel('% Stride');
+    ylabel('Torque');
+    title({'Average activity for ',num2str(torques{torque})});
     legend('Average right torque','Std right torque','Average left torque','Std left torque');
-    set(gcf,'Position',[0 0 1920 980]);
+    set(gcf,'Position',[0 0 1600 800]);
     saveas(gcf,['Activity', num2str(torques{torque})],'png');
 end
 
