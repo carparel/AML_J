@@ -22,8 +22,6 @@ load('struct_mRFX.mat');
 indices_stance_left = find(struct_mRFX.LStance == 1);
 indices_stance_right = find(struct_mRFX.RStance == 1);
 
-% 1 --> stance, 0 --> swing
-% 1 stride --> first 1 to first 1 (next serie) --> indices to split gait
 HS_left = [];
 HS_right = [];
 
@@ -130,7 +128,7 @@ for i = 1:length(HS_right)-1
     for muscle = 1: length(muscles)
         current_signal = struct_muscles.right.parsed.(muscles{muscle}){i};
         interpolated_signal = interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
-        interpolated_signal_per.right.(muscles{muscle}){i} = interpolated_signal /nbr_points * 100; % to have gait cycles
+        interpolated_signal_per.right.(muscles{muscle}){i} = interpolated_signal;
     end
 end
 % Left foot
@@ -138,7 +136,7 @@ for i = 1:length(HS_left)-1
     for muscle = 1: length(muscles)
         current_signal = struct_muscles.left.parsed.(muscles{muscle}){i};
         interpolated_signal= interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
-        interpolated_signal_per.left.(muscles{muscle}){i} = interpolated_signal/nbr_points * 100; % to have gait cycles
+        interpolated_signal_per.left.(muscles{muscle}){i} = interpolated_signal;
     end
 end
 
@@ -165,46 +163,39 @@ for muscle = 1:length(muscles)
 end
 
 %% Plotting Muscles
-
-% Right muscles
 for muscle = 1: length(muscles)
-    indices = 1:1:length(mean_muscles_right.(muscles{muscle}));
+    indices_right = 1:1:length(mean_muscles_right.(muscles{muscle}));
+    indices_right = (indices_right/nbr_points)*100;
     figure;
-    plot(mean_muscles_right.(muscles{muscle}),'k','LineWidth',1.2);
-    fill_x = [indices,fliplr(indices)];
+    plot(indices_right,mean_muscles_right.(muscles{muscle}),'k','LineWidth',1.2);
+    fill_x = [indices_right,fliplr(indices_right)];
     fill_y = [mean_muscles_right.(muscles{muscle}) - std_muscles_right.(muscles{muscle}),fliplr((mean_muscles_right.(muscles{muscle}) + std_muscles_right.(muscles{muscle})))];
-    patch(fill_x,fill_y,'r','EdgeColor','none');
+    patch(fill_x,fill_y,'k','EdgeColor','none');
     alpha(.1)
-    ax = gca;
-    ax.FontSize = 15;
-    legend('Average','Std');
-    title({'Average activity for right',num2str(muscles{muscle})});
-    saveas(gcf,['Activity_right', num2str(muscles{muscle})],'png');
-end
-% Left muscles
-for muscle = 1: length(muscles)
-    indices = 1:1:length(mean_muscles_left.(muscles{muscle}));
-    figure;
-    plot(mean_muscles_left.(muscles{muscle}),'k','LineWidth',1.2);
-    fill_x = [indices,fliplr(indices)];
+    hold on;
+    indices_left = 1:1:length(mean_muscles_left.(muscles{muscle}));
+    indices_left = (indices_left/nbr_points)*100;
+    plot(indices_left,mean_muscles_left.(muscles{muscle}),'b','LineWidth',1.2);
+    fill_x = [indices_left,fliplr(indices_left)];
     fill_y = [mean_muscles_left.(muscles{muscle}) - std_muscles_left.(muscles{muscle}),fliplr((mean_muscles_left.(muscles{muscle}) + std_muscles_left.(muscles{muscle})))];
-    patch(fill_x,fill_y,'r','EdgeColor','none');
+    patch(fill_x,fill_y,'b','EdgeColor','none');
     alpha(.1)
-    ax = gca;
-    ax.FontSize = 15;
     
-    legend('Average','Std');
-    title({'Average activity for left ',num2str(muscles{muscle})});
-    saveas(gcf,['Activity_left', num2str(muscles{muscle})],'png');
+    ax = gca;
+    ax.FontSize = 24;
+    xlabel('% Gait cycle');
+    ylabel('Activity');
+    legend('Average right muscle','Std right muscle','Average left muscle','Std left muscle');
+    title({'Average activity for ',num2str(muscles{muscle})});
+    saveas(gcf,['Activity', num2str(muscles{muscle})],'png');
 end
-
 %% Angles-interpolation
 % Right foot
 for i = 1:length(HS_right)-1
     for angle = 1: length(angles)
         current_signal = struct_angles.right.parsed.(angles{angle}){i};
         interpolated_signal = interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
-        interpolated_signal_per.right.(angles{angle}){i} = interpolated_signal /nbr_points * 100; % to have gait cycles
+        interpolated_signal_per.right.(angles{angle}){i} = interpolated_signal;
     end
 end
 % Left foot
@@ -212,7 +203,7 @@ for i = 1:length(HS_left)-1
     for angle = 1: length(angles)
         current_signal = struct_angles.left.parsed.(angles{angle}){i};
         interpolated_signal = interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
-        interpolated_signal_per.left.(angles{angle}){i} = interpolated_signal /nbr_points * 100; % to have gait cycles
+        interpolated_signal_per.left.(angles{angle}){i} = interpolated_signal;
     end
 end
 % Meand and std
@@ -236,44 +227,40 @@ for angle = 1: length(angles)
     mean_angles_left.(angles{angle}) = mean(angles_matrix_left.(angles{angle}));
     std_angles_left.(angles{angle}) = std(angles_matrix_left.(angles{angle}));
 end
-%% Plotting
-% Right
+%% Plotting angles
 for angle = 1: length(angles)
-    indices = 1:1:length(mean_angles_right.(angles{angle}));
+    indices_right = 1:1:length(mean_angles_right.(angles{angle}));
+    indices_right = (indices_right/nbr_points)*100;
     figure;
-    plot(mean_angles_right.(angles{angle}),'k','LineWidth',1.2);
-    fill_x = [indices,fliplr(indices)];
+    plot(indices_right,mean_angles_right.(angles{angle}),'k','LineWidth',1.2);
+    fill_x = [indices_right,fliplr(indices_right)];
     fill_y = [mean_angles_right.(angles{angle}) - std_angles_right.(angles{angle}),fliplr((mean_angles_right.(angles{angle}) + std_angles_right.(angles{angle})))];
-    patch(fill_x,fill_y,'r','EdgeColor','none');
+    patch(fill_x,fill_y,'k','EdgeColor','none');
     alpha(.1)
-    ax = gca;
-    ax.FontSize = 15;
-    title({'Average activity for right',num2str(angles{angle})});
-    legend('Average','Std');
-    saveas(gcf,['Activity_right', num2str(angles{angle})],'png');
-end
-% Left
-for angle = 1: length(angles)
-    indices = 1:1:length(mean_angles_left.(angles{angle}));
-    figure;
-    plot(mean_angles_left.(angles{angle}),'k','LineWidth',1.2);
-    fill_x = [indices,fliplr(indices)];
+    hold on;
+    indices_left = 1:1:length(mean_angles_left.(angles{angle}));
+    indices_left = (indices_left/nbr_points)*100;
+    plot(indices_left,mean_angles_left.(angles{angle}),'b','LineWidth',1.2);
+    fill_x = [indices_left,fliplr(indices_left)];
     fill_y = [mean_angles_left.(angles{angle}) - std_angles_left.(angles{angle}),fliplr((mean_angles_left.(angles{angle}) + std_angles_left.(angles{angle})))];
-    patch(fill_x,fill_y,'r','EdgeColor','none');
+    patch(fill_x,fill_y,'b','EdgeColor','none');
     alpha(.1)
     ax = gca;
-    ax.FontSize = 15;
-    title({'Average activity for left',num2str(angles{angle})});
-    legend('Average','Std');
-     saveas(gcf,['Activity_left', num2str(angles{angle})],'png');
+    ax.FontSize = 24;
+    xlabel('% Gait cycle');
+    ylabel('Activity');
+    title({'Average activity for',num2str(angles{angle})});
+    legend('Average right angle','Std right angle','Average left angle','Std left angle');
+    saveas(gcf,['Activity', num2str(angles{angle})],'png');
 end
+
 %% Torques-interpolation
 % Right foot
 for i = 1:length(HS_right)-1
     for torque= 1: length(torques)
         current_signal = struct_torques.right.parsed.(torques{torque}){i};
         interpolated_signal = interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
-        interpolated_signal_per.right.(torques{torque}){i} = interpolated_signal /nbr_points * 100; % to have gait cycles
+        interpolated_signal_per.right.(torques{torque}){i} = interpolated_signal; % to have gait cycles
     end
 end
 % Left foot
@@ -281,7 +268,7 @@ for i = 1:length(HS_left)-1
     for torque= 1: length(torques)
         current_signal = struct_torques.left.parsed.(torques{torque}){i};
         interpolated_signal = interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
-        interpolated_signal_per.left.(torques{torque}){i} = interpolated_signal /nbr_points * 100; % to have gait cycles
+        interpolated_signal_per.left.(torques{torque}){i} = interpolated_signal ; % to have gait cycles
     end
 end
 % Meand and std
@@ -307,36 +294,32 @@ for torque= 1: length(torques)
 end
 
 %% Plotting
-% Right
 for torque= 1: length(torques)
-    indices = 1:1:length(mean_torques_right.(torques{torque}));
+    indices_right = 1:1:length(mean_torques_right.(torques{torque}));
+    indices_right = (indices_right/nbr_points)*100;
     figure;
-    plot(mean_torques_right.(torques{torque}),'k','LineWidth',1.2);
-    fill_x = [indices,fliplr(indices)];
+    plot(indices_right,mean_torques_right.(torques{torque}),'k','LineWidth',1.2);
+    fill_x = [indices_right,fliplr(indices_right)];
     fill_y = [mean_torques_right.(torques{torque}) - std_torques_right.(torques{torque}),fliplr((mean_torques_right.(torques{torque}) + std_torques_right.(torques{torque})))];
-    patch(fill_x,fill_y,'r','EdgeColor','none');
+    patch(fill_x,fill_y,'k','EdgeColor','none');
     alpha(.1)
-    ax = gca;
-    ax.FontSize = 15;
-    title({'Average activity for right',num2str(torques{torque})});
-    legend('Average','Std');
-    saveas(gcf,['Activity_right', num2str(torques{torque})],'png');
-end
-% Left
-for torque= 1: length(torques)
-    indices = 1:1:length(mean_torques_left.(torques{torque}));
-    figure;
-    plot(mean_torques_left.(torques{torque}),'k','LineWidth',1.2);
-    fill_x = [indices,fliplr(indices)];
+    hold on;
+    indices_left = 1:1:length(mean_torques_left.(torques{torque}));
+    indices_left = (indices_left/nbr_points)*100;
+    plot(indices_left,mean_torques_left.(torques{torque}),'b','LineWidth',1.2);
+    fill_x = [indices_left,fliplr(indices_left)];
     fill_y = [mean_torques_left.(torques{torque}) - std_torques_left.(torques{torque}),fliplr((mean_torques_left.(torques{torque}) + std_torques_left.(torques{torque})))];
-    patch(fill_x,fill_y,'r','EdgeColor','none');
+    patch(fill_x,fill_y,'b','EdgeColor','none');
     alpha(.1)
     ax = gca;
-    ax.FontSize = 15;
-    title({'Average activity for left',num2str(torques{torque})});
-    legend('Average','Std');
-    saveas(gcf,['Activity_left', num2str(torques{torque})],'png');
+    ax.FontSize = 24;
+    xlabel('% Gait cycle');
+    ylabel('Activity');
+    title({'Average activity for right',num2str(torques{torque})});
+    legend('Average right torque','Std right torque','Average left torque','Std left torque');
+    saveas(gcf,['Activity', num2str(torques{torque})],'png');
 end
+
 
 
 
