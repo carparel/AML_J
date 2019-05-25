@@ -183,6 +183,7 @@ for muscle = 1: length(muscles)
     
     ax = gca;
     ax.FontSize = 40;
+    axis([0 100 0 1])
     xlabel('% Stride');
     ylabel('Activity');
     legend('Average right muscle','Std right muscle','Average left muscle','Std left muscle');
@@ -196,7 +197,7 @@ for i = 1:length(HS_right)-1
     for angle = 1: length(angles)
         current_signal = struct_angles.right.parsed.(angles{angle}){i};
         interpolated_signal = interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
-        interpolated_signal_per.right.(angles{angle}){i} = rad2deg(interpolated_signal);
+        interpolated_signal_per.right.(angles{angle}){i} = 180- rad2deg(interpolated_signal);
     end
 end
 % Left foot
@@ -204,7 +205,7 @@ for i = 1:length(HS_left)-1
     for angle = 1: length(angles)
         current_signal = struct_angles.left.parsed.(angles{angle}){i};
         interpolated_signal = interp1(1:1:length(current_signal),current_signal,1:1:nbr_points,'nearest');
-        interpolated_signal_per.left.(angles{angle}){i} = rad2deg(interpolated_signal);
+        interpolated_signal_per.left.(angles{angle}){i} = 180 - rad2deg(interpolated_signal);
     end
 end
 % Meand and std
@@ -248,6 +249,7 @@ for angle = 1: length(angles)
     alpha(.1)
     ax = gca;
     ax.FontSize = 40;
+    
     xlabel('% Stride');
     ylabel('Degrees');
     title({'Average activity for',num2str(angles{angle})});

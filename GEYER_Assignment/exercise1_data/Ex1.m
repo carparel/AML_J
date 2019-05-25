@@ -221,10 +221,10 @@ YMIN = 0;
 YMAX = 3200;
 figure(1);
 %plot(first_GRF1(:,2));
-plot(GRF2(:,2));
+plot(GRF1(:,2));
 hold on;
-plot(GRF3(:,2));
-legend('2','3');
+plot(GRF2(:,2));
+legend('1','2');
 axis([XMIN XMAX YMIN YMAX])
 
 FFb.foot_falls1 = data_to_compare1.data1.footfall.data;
