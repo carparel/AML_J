@@ -88,7 +88,7 @@ for nbr=1:nbr_data
     for i = 1: length(current_HS) -1
         % stride
         FF.(strides_durations_left{nbr})(i) = current_HS(i+1) - current_HS(i);
-        FF.(strides_freqs_left{nbr})(i) = 1./ (current_HS(i+1) - current_HS(i)); % WHY don't we stock this???
+        FF.(strides_freqs_left{nbr})(i) = 2./ (current_HS(i+1) - current_HS(i)); % WHY don't we stock this???
         
         % stance
         FF.(stances_durations_left{nbr})(i) = current_TO(i+1) - current_HS(i);
@@ -114,7 +114,7 @@ for nbr=1:nbr_data
         
         % stride
         FF.(strides_durations_right{nbr})(i) = current_HS(i+1) - current_HS(i);
-        FF.(strides_freqs_right{nbr})(i) = 1./ (current_HS(i+1) - current_HS(i));
+        FF.(strides_freqs_right{nbr})(i) = 2./ (current_HS(i+1) - current_HS(i));
         
         % stance
         FF.(stances_durations_right{nbr})(i) = current_TO(i+1) - current_HS(i);

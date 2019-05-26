@@ -78,7 +78,7 @@ for muscle = 1:length(muscles)
         for nbr=1:nbr_cond
             current_HS =  HS_left.(muscles{muscle}).(conditions{condition});
             for i = 1: length(current_HS) -1
-                Results.left.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 1./ (current_HS(i+1) - current_HS(i));
+                Results.left.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 2./ (current_HS(i+1) - current_HS(i));
             end
             stride_freq_total_left.(muscles{muscle}).(conditions{condition}) = [stride_freq_total_left.(muscles{muscle}).(conditions{condition}) , Results.left.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i)];
         end
@@ -97,7 +97,7 @@ for muscle = 1:length(muscles)
         for nbr=1:nbr_cond
             current_HS =  HS_right.(muscles{muscle}).(conditions{condition});
             for i = 1: length(current_HS) -1
-                Results.right.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 1./ (current_HS(i+1) - current_HS(i));
+                Results.right.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 2./ (current_HS(i+1) - current_HS(i));
             end
             stride_freq_total_right.(muscles{muscle}).(conditions{condition}) = [stride_freq_total_right.(muscles{muscle}).(conditions{condition}) , Results.right.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i)];
         end
@@ -140,7 +140,7 @@ end
 % Left
 for muscle = 1: length(muscles)
     for condition = 1: length(conditions)
-        current_mean_duration_stride =  1./(Results.left.mean_stride_freq.(muscles{muscle}).(conditions{condition}));
+        current_mean_duration_stride =  2./(Results.left.mean_stride_freq.(muscles{muscle}).(conditions{condition}));
         current_mean_speed_stride = Results.left.walking_speed_left.(muscles{muscle}).(conditions{condition});
         Results.left.mean_length_stride.(muscles{muscle}).(conditions{condition}) = current_mean_speed_stride * current_mean_duration_stride;
     end
@@ -149,7 +149,7 @@ end
 % Right
 for muscle = 1: length(muscles)
     for condition = 1: length(conditions)
-        current_mean_duration_stride =  1./(Results.right.mean_stride_freq.(muscles{muscle}).(conditions{condition}));
+        current_mean_duration_stride =  2./(Results.right.mean_stride_freq.(muscles{muscle}).(conditions{condition}));
         current_mean_speed_stride = Results.right.walking_speed_right.(muscles{muscle}).(conditions{condition});
         Results.right.mean_length_stride.(muscles{muscle}).(conditions{condition}) = current_mean_speed_stride * current_mean_duration_stride;
     end
