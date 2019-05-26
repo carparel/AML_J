@@ -190,13 +190,22 @@ Result.std_stance_over_swing = std(FF.stance_duration_total./FF.swing_duration_t
 Min = min(length(FF.swing_duration_total),length(FF.double_stance_duration_total));
 Result.std_swing_over_double_stance = std(FF.swing_duration_total(1:Min)./FF.double_stance_duration_total(1:Min));
 
-errorbar([Result.mean_stride_over_stance,Result.mean_stance_over_swing,Result.mean_swing_over_double_stance],[Result.std_stride_over_stance,Result.std_stance_over_swing,Result.std_swing_over_double_stance],'ko');
+errorbar([Result.mean_stride_over_stance,Result.mean_stance_over_swing,Result.mean_swing_over_double_stance],[Result.std_stride_over_stance,Result.std_stance_over_swing,Result.std_swing_over_double_stance],'ko','LineWidth',1.2);
 hold on
-plot(linspace(0,4,20), ((1+sqrt(5))/2)*ones(1,20), '--r');
+
+plot(linspace(0,4,20), ((1+sqrt(5))/2)*ones(1,20), '--r','LineWidth',1.2);
+text(0,(1+sqrt(5))/2,'$\phi = \frac{1 + \sqrt{5}}{2}$','HorizontalAlignment','right','FontSize',40,'interpreter','latex')
+% ['PHI =' num2str((1+sqrt(5)/2))]
 axis([0, 4, 1, 2]);
-xticks([1 2 3]);
-xticklabels({'Stride/Stance','Stance/Swing','Swing/Double stance'});
-set(gca, 'YTick', unique([((1+sqrt(5))/2), get(gca, 'YTick')]));
+ax = gca;
+ax.FontSize = 40;
+
+set(gca,'TickLabelInterpreter', 'latex','XTick',([1 2 3]),'XTickLabel',{'$\frac{Stride}{Stance}$','$\frac{Stance}{Swing}$','$\frac{Swing}{Double \ stance}$'});
+set(gca,'TickLabelInterpreter', 'latex', 'YTick',[1,1.2,1.4,1.8,2]);
+title('Proportions among gait phases','interpreter','latex')
+set(gcf,'Position',[0 0 1600 800]);
+saveas(gcf,'golden_ratio','png');
+
 
 %% Evaluate the walking speed
 sample_freq = 100; % 100 Hz
@@ -208,9 +217,7 @@ for nbr=1:nbr_data
     walking_speed_right{nbr} =  ((mean(FF.(strides_freqs_right{nbr}))* sample_freq)./alpha).^(1/beta);
 end
 %% EXERCISE 1b
-clc;
-clear all;
-close all
+
 %% Ground reaction forces - comparing running and walking
 data_to_compare1 = load('data1b.mat');
 %data_to_compare2 = load('data2b.mat');
@@ -222,17 +229,33 @@ GRF2 = data_to_compare1.data2.grf.data;
 GRF3 = data_to_compare1.data3.grf.data;
 
 
+
+figure(1);
+freq = 100; % 100 Hz, sampling rate
+time_indices_1 = 1:1:length(GRF1(:,2));
+time_points_1 = time_indices_1/freq;
+time_indices_2 = 1:1:length(GRF2(:,2));
+time_points_2 = time_indices_2/freq;
+
 XMIN = 0;
-XMAX = 300;
+XMAX = 5;
 YMIN = 0;
 YMAX = 3200;
-figure(1);
-%plot(first_GRF1(:,2));
-plot(GRF1(:,2));
+
+plot((time_indices_1/freq),GRF1(:,2),'r','LineWidth',1.4);
 hold on;
-plot(GRF2(:,2));
-legend('1','2');
+plot((time_indices_2/freq),GRF2(:,2),'b','LineWidth',1.4);
+
+legend('walking','running','interpreter','latex');
+ax = gca;
+ax.FontSize = 40;
 axis([XMIN XMAX YMIN YMAX])
+set(gca,'TickLabelInterpreter', 'latex')
+set(gcf,'Position',[0 0 1600 800]);
+xlabel('time [s]','interpreter','latex')
+ylabel('GRF','interpreter','latex')
+title('Comparison between running and walking','interpreter','latex')
+saveas(gcf,'running_walking','png');
 
 FFb.foot_falls1 = data_to_compare1.data1.footfall.data;
 FFb.foot_falls2 = data_to_compare1.data2.footfall.data;
