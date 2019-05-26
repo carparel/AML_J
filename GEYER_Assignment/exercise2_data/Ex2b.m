@@ -48,9 +48,21 @@ for muscle = 1: length(muscles)
         HS_left.(muscles{muscle}).(conditions{condition}) = [];
         for i = 1:length(indices_stance_left.(muscles{muscle}).(conditions{condition}))-1
             if (indices_stance_left.(muscles{muscle}).(conditions{condition})(i+1) - indices_stance_left.(muscles{muscle}).(conditions{condition})(i) > 1)
-                HS_left.(muscles{muscle}).(conditions{condition}) = [HS_left.(muscles{muscle}).(conditions{condition}), indices_stance_left.(muscles{muscle}).(conditions{condition})(i+1)];
+                ind = indices_stance_left.(muscles{muscle}).(conditions{condition})(i+1);
+                if (i+101<=length(indices_stance_left.(muscles{muscle}).(conditions{condition})))
+                    test = struct.(muscles{muscle}).(conditions{condition}).LStance(ind:ind+100);
+                    if (~(ismember(0,test)))
+                        HS_left.(muscles{muscle}).(conditions{condition}) = [HS_left.(muscles{muscle}).(conditions{condition}), indices_stance_left.(muscles{muscle}).(conditions{condition})(i+1)];
+                    end
+                end
             end
         end
+        %uncomment to visualize the HS detections
+%         figure;
+%         plot(struct.(muscles{muscle}).(conditions{condition}).LStance);
+%         title(strcat('LEFT: muscle ', num2str(muscle), ', condition ', num2str(condition)));
+%         hold on
+%         scatter(HS_left.(muscles{muscle}).(conditions{condition}), ones(1,length(HS_left.(muscles{muscle}).(conditions{condition}))));
     end
 end
 
@@ -60,9 +72,21 @@ for muscle = 1: length(muscles)
         HS_right.(muscles{muscle}).(conditions{condition}) = [];
         for i = 1:length(indices_stance_right.(muscles{muscle}).(conditions{condition}))-1
             if (indices_stance_right.(muscles{muscle}).(conditions{condition})(i+1) - indices_stance_right.(muscles{muscle}).(conditions{condition})(i) > 1)
-                HS_right.(muscles{muscle}).(conditions{condition}) = [HS_right.(muscles{muscle}).(conditions{condition}), indices_stance_right.(muscles{muscle}).(conditions{condition})(i+1)];
+                ind = indices_stance_right.(muscles{muscle}).(conditions{condition})(i+1);
+                if (i+101<=length(indices_stance_right.(muscles{muscle}).(conditions{condition})))
+                    test = struct.(muscles{muscle}).(conditions{condition}).RStance(ind:ind+100);
+                    if (~(ismember(0,test)))
+                        HS_right.(muscles{muscle}).(conditions{condition}) = [HS_right.(muscles{muscle}).(conditions{condition}), indices_stance_right.(muscles{muscle}).(conditions{condition})(i+1)];
+                    end
+                end
             end
         end
+        %uncomment to visualize the HS detections
+%         figure;
+%         plot(struct.(muscles{muscle}).(conditions{condition}).LStance);
+%         title(strcat('RIGHT: muscle ', num2str(muscle), ', condition ', num2str(condition)));
+%         hold on
+%         scatter(HS_left.(muscles{muscle}).(conditions{condition}), ones(1,length(HS_left.(muscles{muscle}).(conditions{condition}))));
     end
 end
 

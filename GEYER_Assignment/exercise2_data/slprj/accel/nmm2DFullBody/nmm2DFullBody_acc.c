@@ -2030,65 +2030,65 @@ ssIsMajorTimeStep ( S ) != 0 ) { _rtDW -> Switch_Mode_bf = ( _rtB ->
 B_37_1502_0 > _rtP -> P_655 ) ; _rtDW -> Switch_Mode_j = ( _rtB ->
 B_37_1505_0 > _rtP -> P_657 ) ; } ssCallAccelRunBlock ( S , 37 , 1507 ,
 SS_CALL_MDL_OUTPUTS ) ; ssCallAccelRunBlock ( S , 37 , 1508 ,
-SS_CALL_MDL_OUTPUTS ) ; _rtB -> B_37_1509_0 = _rtB -> B_37_472_0 ; if (
+SS_CALL_MDL_OUTPUTS ) ; isHit = ssIsSampleHit ( S , 3 , 0 ) ; if ( isHit != 0
+) { ssCallAccelRunBlock ( S , 36 , 0 , SS_CALL_MDL_OUTPUTS ) ; } _rtB ->
+B_37_1510_0 = _rtB -> B_36_0_1 [ 0 ] + _rtB -> B_37_472_0 ; if (
 ssIsMajorTimeStep ( S ) != 0 ) { _rtDW -> Switch_Mode_pc = ( _rtB ->
-B_37_1509_0 > _rtP -> P_659 ) ; } if ( _rtDW -> Switch_Mode_pc ) { _rtB ->
-B_37_1511_0 = _rtB -> B_37_1509_0 ; } else { _rtB -> B_37_1511_0 = _rtB ->
-B_37_1510_0 ; } _rtB -> B_37_1512_0 = _rtP -> P_660 * _rtB -> B_37_1511_0 ;
-_rtB -> B_37_1513_0 = _rtP -> P_661 * _rtB -> B_37_472_0 ; _rtB ->
-B_37_1515_0 = _rtB -> B_37_1513_0 - _rtB -> B_37_1514_0 ; if (
-ssIsMajorTimeStep ( S ) != 0 ) { _rtDW -> Abs_MODE_he = ( _rtB -> B_37_1515_0
->= 0.0 ) ; } _rtB -> B_37_1516_0 = _rtDW -> Abs_MODE_he > 0 ? _rtB ->
-B_37_1515_0 : - _rtB -> B_37_1515_0 ; _rtB -> B_37_1518_0 = _rtB ->
-B_37_1516_0 / _rtB -> B_37_1517_0 ; if ( ( _rtB -> B_37_1518_0 < 0.0 ) && (
-_rtB -> B_37_1519_0 > muDoubleScalarFloor ( _rtB -> B_37_1519_0 ) ) ) {
-rtb_B_37_693_0 = - muDoubleScalarPower ( - _rtB -> B_37_1518_0 , _rtB ->
-B_37_1519_0 ) ; } else { rtb_B_37_693_0 = muDoubleScalarPower ( _rtB ->
-B_37_1518_0 , _rtB -> B_37_1519_0 ) ; } _rtB -> B_37_1521_0 = _rtP -> P_665 *
-rtb_B_37_693_0 ; _rtB -> B_37_1523_0 = 0.0 ; _rtB -> B_37_1523_0 += _rtP ->
-P_668 * _rtX -> StateSpace_CSTATE_p ; _rtB -> B_37_1524_0 = muDoubleScalarExp
-( _rtB -> B_37_1521_0 ) * _rtB -> B_37_1523_0 ; _rtB -> B_37_1526_0 = _rtB ->
-B_37_1513_0 - _rtB -> B_37_1525_0 ; _rtB -> B_37_1528_0 = _rtB -> B_37_1526_0
-/ _rtB -> B_37_1527_0 ; _rtB -> B_37_1534_0 = _rtB -> B_37_1528_0 * _rtB ->
-B_37_1528_0 * ( real_T ) ( _rtB -> B_37_1526_0 < 0.0 ) + rtb_B_37_480_0 ;
-_rtB -> B_37_1536_0 = _rtB -> B_37_1513_0 - _rtB -> B_37_1535_0 ; _rtB ->
-B_37_1538_0 = _rtB -> B_37_1536_0 / _rtB -> B_37_1537_0 ; _rtB -> B_37_1541_0
-= _rtB -> B_37_1538_0 * _rtB -> B_37_1538_0 * ( real_T ) ( _rtB ->
-B_37_1513_0 > 1.0 ) + _rtB -> B_37_1524_0 ; _rtB -> B_37_1542_0 = _rtB ->
-B_37_1534_0 / _rtB -> B_37_1541_0 ; _rtB -> B_37_1543_0 = _rtB -> B_37_1542_0
-- _rtB -> B_37_1532_0 ; _rtB -> B_37_1544_0 = 1.0 / _rtB -> B_37_1533_0 *
-_rtB -> B_37_1543_0 ; _rtB -> B_37_1549_0 = _rtP -> P_680 * _rtB ->
-B_37_1542_0 ; _rtB -> B_37_1550_0 = _rtP -> P_681 * _rtB -> B_37_1544_0 ;
-_rtB -> B_37_1551_0 = _rtP -> P_682 * _rtB -> B_37_1543_0 ; _rtB ->
-B_37_1552_0 = _rtB -> B_37_1551_0 + _rtB -> B_37_1548_0 ; _rtB -> B_37_1553_0
-= _rtB -> B_37_1544_0 + _rtB -> B_37_1546_0 ; _rtB -> B_37_1554_0 = _rtB ->
-B_37_1546_0 - _rtB -> B_37_1550_0 ; _rtB -> B_37_1555_0 = _rtB -> B_37_1553_0
-/ _rtB -> B_37_1554_0 ; _rtB -> B_37_1558_0 = ( real_T ) ( _rtB ->
-B_37_1542_0 > 1.0 ) * _rtB -> B_37_1555_0 * ( real_T ) ( _rtB -> B_37_1542_0
-<= _rtB -> B_37_1547_0 ) + ( real_T ) ( _rtB -> B_37_1542_0 > _rtB ->
-B_37_1547_0 ) * _rtB -> B_37_1552_0 ; _rtB -> B_37_1559_0 = _rtB ->
-B_37_1545_0 + _rtB -> B_37_1549_0 ; _rtB -> B_37_1560_0 = _rtB -> B_37_1542_0
-- _rtB -> B_37_1545_0 ; _rtB -> B_37_1561_0 = _rtB -> B_37_1560_0 / _rtB ->
-B_37_1559_0 ; _rtB -> B_37_1563_0 = ( real_T ) ( _rtB -> B_37_1542_0 <= 1.0 )
-* _rtB -> B_37_1561_0 + _rtB -> B_37_1558_0 ; _rtB -> B_37_1564_0 = _rtP ->
-P_683 * _rtB -> B_37_1563_0 ; _rtB -> B_37_1565_0 = _rtB -> B_37_484_0 ; if (
+B_37_1510_0 > _rtP -> P_659 ) ; } if ( _rtDW -> Switch_Mode_pc ) { _rtB ->
+B_37_1512_0 = _rtB -> B_37_1510_0 ; } else { _rtB -> B_37_1512_0 = _rtB ->
+B_37_1511_0 ; } _rtB -> B_37_1513_0 = _rtP -> P_660 * _rtB -> B_37_1512_0 ;
+_rtB -> B_37_1514_0 = _rtP -> P_661 * _rtB -> B_37_472_0 ; _rtB ->
+B_37_1516_0 = _rtB -> B_37_1514_0 - _rtB -> B_37_1515_0 ; if (
+ssIsMajorTimeStep ( S ) != 0 ) { _rtDW -> Abs_MODE_he = ( _rtB -> B_37_1516_0
+>= 0.0 ) ; } _rtB -> B_37_1517_0 = _rtDW -> Abs_MODE_he > 0 ? _rtB ->
+B_37_1516_0 : - _rtB -> B_37_1516_0 ; _rtB -> B_37_1519_0 = _rtB ->
+B_37_1517_0 / _rtB -> B_37_1518_0 ; if ( ( _rtB -> B_37_1519_0 < 0.0 ) && (
+_rtB -> B_37_1520_0 > muDoubleScalarFloor ( _rtB -> B_37_1520_0 ) ) ) {
+rtb_B_37_693_0 = - muDoubleScalarPower ( - _rtB -> B_37_1519_0 , _rtB ->
+B_37_1520_0 ) ; } else { rtb_B_37_693_0 = muDoubleScalarPower ( _rtB ->
+B_37_1519_0 , _rtB -> B_37_1520_0 ) ; } _rtB -> B_37_1522_0 = _rtP -> P_665 *
+rtb_B_37_693_0 ; _rtB -> B_37_1524_0 = 0.0 ; _rtB -> B_37_1524_0 += _rtP ->
+P_668 * _rtX -> StateSpace_CSTATE_p ; _rtB -> B_37_1525_0 = muDoubleScalarExp
+( _rtB -> B_37_1522_0 ) * _rtB -> B_37_1524_0 ; _rtB -> B_37_1527_0 = _rtB ->
+B_37_1514_0 - _rtB -> B_37_1526_0 ; _rtB -> B_37_1529_0 = _rtB -> B_37_1527_0
+/ _rtB -> B_37_1528_0 ; _rtB -> B_37_1535_0 = _rtB -> B_37_1529_0 * _rtB ->
+B_37_1529_0 * ( real_T ) ( _rtB -> B_37_1527_0 < 0.0 ) + rtb_B_37_480_0 ;
+_rtB -> B_37_1537_0 = _rtB -> B_37_1514_0 - _rtB -> B_37_1536_0 ; _rtB ->
+B_37_1539_0 = _rtB -> B_37_1537_0 / _rtB -> B_37_1538_0 ; _rtB -> B_37_1542_0
+= _rtB -> B_37_1539_0 * _rtB -> B_37_1539_0 * ( real_T ) ( _rtB ->
+B_37_1514_0 > 1.0 ) + _rtB -> B_37_1525_0 ; _rtB -> B_37_1543_0 = _rtB ->
+B_37_1535_0 / _rtB -> B_37_1542_0 ; _rtB -> B_37_1544_0 = _rtB -> B_37_1543_0
+- _rtB -> B_37_1533_0 ; _rtB -> B_37_1545_0 = 1.0 / _rtB -> B_37_1534_0 *
+_rtB -> B_37_1544_0 ; _rtB -> B_37_1550_0 = _rtP -> P_680 * _rtB ->
+B_37_1543_0 ; _rtB -> B_37_1551_0 = _rtP -> P_681 * _rtB -> B_37_1545_0 ;
+_rtB -> B_37_1552_0 = _rtP -> P_682 * _rtB -> B_37_1544_0 ; _rtB ->
+B_37_1553_0 = _rtB -> B_37_1552_0 + _rtB -> B_37_1549_0 ; _rtB -> B_37_1554_0
+= _rtB -> B_37_1545_0 + _rtB -> B_37_1547_0 ; _rtB -> B_37_1555_0 = _rtB ->
+B_37_1547_0 - _rtB -> B_37_1551_0 ; _rtB -> B_37_1556_0 = _rtB -> B_37_1554_0
+/ _rtB -> B_37_1555_0 ; _rtB -> B_37_1559_0 = ( real_T ) ( _rtB ->
+B_37_1543_0 > 1.0 ) * _rtB -> B_37_1556_0 * ( real_T ) ( _rtB -> B_37_1543_0
+<= _rtB -> B_37_1548_0 ) + ( real_T ) ( _rtB -> B_37_1543_0 > _rtB ->
+B_37_1548_0 ) * _rtB -> B_37_1553_0 ; _rtB -> B_37_1560_0 = _rtB ->
+B_37_1546_0 + _rtB -> B_37_1550_0 ; _rtB -> B_37_1561_0 = _rtB -> B_37_1543_0
+- _rtB -> B_37_1546_0 ; _rtB -> B_37_1562_0 = _rtB -> B_37_1561_0 / _rtB ->
+B_37_1560_0 ; _rtB -> B_37_1564_0 = ( real_T ) ( _rtB -> B_37_1543_0 <= 1.0 )
+* _rtB -> B_37_1562_0 + _rtB -> B_37_1559_0 ; _rtB -> B_37_1565_0 = _rtP ->
+P_683 * _rtB -> B_37_1564_0 ; _rtB -> B_37_1566_0 = _rtB -> B_37_484_0 ; if (
 ssIsMajorTimeStep ( S ) != 0 ) { _rtDW -> Switch_Mode_b1 = ( _rtB ->
-B_37_1565_0 > _rtP -> P_685 ) ; } if ( _rtDW -> Switch_Mode_b1 ) { _rtB ->
-B_37_1567_0 = _rtB -> B_37_1565_0 ; } else { _rtB -> B_37_1567_0 = _rtB ->
-B_37_1566_0 ; } _rtB -> B_37_1568_0 = _rtP -> P_686 * _rtB -> B_37_1567_0 ;
-_rtB -> B_37_1570_0 = _rtB -> B_37_1512_0 - _rtB -> B_37_1569_0 ; if ( _rtB
--> B_37_1570_0 > _rtP -> P_688 ) { _rtB -> B_37_1571_0 = _rtP -> P_688 ; }
-else if ( _rtB -> B_37_1570_0 < _rtP -> P_689 ) { _rtB -> B_37_1571_0 = _rtP
--> P_689 ; } else { _rtB -> B_37_1571_0 = _rtB -> B_37_1570_0 ; } isHit =
-ssIsSampleHit ( S , 3 , 0 ) ; if ( isHit != 0 ) { ssCallAccelRunBlock ( S ,
-36 , 0 , SS_CALL_MDL_OUTPUTS ) ; } _rtB -> B_37_1574_0 = _rtB -> B_36_0_1 [ 0
-] + _rtB -> B_37_717_0 ; if ( ssIsMajorTimeStep ( S ) != 0 ) { _rtDW ->
-Switch_Mode_od = ( _rtB -> B_37_1574_0 > _rtP -> P_691 ) ; } if ( _rtDW ->
-Switch_Mode_od ) { _rtB -> B_37_1575_0 = _rtB -> B_37_1574_0 ; } else { _rtB
--> B_37_1575_0 = _rtB -> B_37_1572_0 ; } _rtB -> B_37_1577_0 = _rtB ->
-B_37_1564_0 ; _rtB -> B_37_1579_0 = _rtP -> P_694 * _rtB -> B_37_436_0 ; _rtB
--> B_37_1581_0 = _rtB -> B_37_1579_0 - _rtB -> B_37_1580_0 ; if (
-ssIsMajorTimeStep ( S ) != 0 ) { _rtDW -> Switch_Mode_bv = ( _rtB ->
+B_37_1566_0 > _rtP -> P_685 ) ; } if ( _rtDW -> Switch_Mode_b1 ) { _rtB ->
+B_37_1568_0 = _rtB -> B_37_1566_0 ; } else { _rtB -> B_37_1568_0 = _rtB ->
+B_37_1567_0 ; } _rtB -> B_37_1569_0 = _rtP -> P_686 * _rtB -> B_37_1568_0 ;
+_rtB -> B_37_1571_0 = _rtB -> B_37_1513_0 - _rtB -> B_37_1570_0 ; if ( _rtB
+-> B_37_1571_0 > _rtP -> P_688 ) { _rtB -> B_37_1572_0 = _rtP -> P_688 ; }
+else if ( _rtB -> B_37_1571_0 < _rtP -> P_689 ) { _rtB -> B_37_1572_0 = _rtP
+-> P_689 ; } else { _rtB -> B_37_1572_0 = _rtB -> B_37_1571_0 ; } _rtB ->
+B_37_1574_0 = _rtB -> B_37_717_0 ; if ( ssIsMajorTimeStep ( S ) != 0 ) {
+_rtDW -> Switch_Mode_od = ( _rtB -> B_37_1574_0 > _rtP -> P_691 ) ; } if (
+_rtDW -> Switch_Mode_od ) { _rtB -> B_37_1575_0 = _rtB -> B_37_1574_0 ; }
+else { _rtB -> B_37_1575_0 = _rtB -> B_37_1573_0 ; } _rtB -> B_37_1577_0 =
+_rtB -> B_37_1565_0 ; _rtB -> B_37_1579_0 = _rtP -> P_694 * _rtB ->
+B_37_436_0 ; _rtB -> B_37_1581_0 = _rtB -> B_37_1579_0 - _rtB -> B_37_1580_0
+; if ( ssIsMajorTimeStep ( S ) != 0 ) { _rtDW -> Switch_Mode_bv = ( _rtB ->
 B_37_1577_0 > _rtP -> P_693 ) ; _rtDW -> Abs_MODE_hi = ( _rtB -> B_37_1581_0
 >= 0.0 ) ; } _rtB -> B_37_1582_0 = _rtDW -> Abs_MODE_hi > 0 ? _rtB ->
 B_37_1581_0 : - _rtB -> B_37_1581_0 ; _rtB -> B_37_1584_0 = _rtB ->
@@ -2488,16 +2488,16 @@ _rtB -> B_37_1466_0 = _rtP -> P_640 ; _rtB -> B_37_1474_0 = _rtP -> P_641 ;
 _rtB -> B_37_1475_0 = _rtP -> P_642 ; _rtB -> B_37_1476_0 = _rtP -> P_643 ;
 _rtB -> B_37_1477_0 = _rtP -> P_644 ; _rtB -> B_37_1495_0 = _rtP -> P_649 ;
 _rtB -> B_37_1498_0 = _rtP -> P_652 ; _rtB -> B_37_1501_0 = _rtP -> P_654 ;
-_rtB -> B_37_1504_0 = _rtP -> P_656 ; _rtB -> B_37_1510_0 = _rtP -> P_658 ;
-_rtB -> B_37_1514_0 = _rtP -> P_662 ; _rtB -> B_37_1517_0 = _rtP -> P_663 ;
-_rtB -> B_37_1519_0 = _rtP -> P_664 ; _rtB -> B_37_1525_0 = _rtP -> P_670 ;
-_rtB -> B_37_1527_0 = _rtP -> P_671 ; _rtB -> B_37_1532_0 = _rtP -> P_673 ;
-_rtB -> B_37_1533_0 = _rtB -> B_37_1532_0 - _rtP -> P_672 ; _rtB ->
-B_37_1535_0 = _rtP -> P_674 ; _rtB -> B_37_1537_0 = _rtP -> P_675 ; _rtB ->
-B_37_1545_0 = _rtP -> P_676 ; _rtB -> B_37_1546_0 = _rtP -> P_677 ; _rtB ->
-B_37_1547_0 = _rtP -> P_678 ; _rtB -> B_37_1548_0 = _rtP -> P_679 ; _rtB ->
-B_37_1566_0 = _rtP -> P_684 ; _rtB -> B_37_1569_0 = _rtP -> P_687 ; _rtB ->
-B_37_1572_0 = _rtP -> P_690 ; _rtB -> B_37_1576_0 = _rtP -> P_692 ; _rtB ->
+_rtB -> B_37_1504_0 = _rtP -> P_656 ; _rtB -> B_37_1511_0 = _rtP -> P_658 ;
+_rtB -> B_37_1515_0 = _rtP -> P_662 ; _rtB -> B_37_1518_0 = _rtP -> P_663 ;
+_rtB -> B_37_1520_0 = _rtP -> P_664 ; _rtB -> B_37_1526_0 = _rtP -> P_670 ;
+_rtB -> B_37_1528_0 = _rtP -> P_671 ; _rtB -> B_37_1533_0 = _rtP -> P_673 ;
+_rtB -> B_37_1534_0 = _rtB -> B_37_1533_0 - _rtP -> P_672 ; _rtB ->
+B_37_1536_0 = _rtP -> P_674 ; _rtB -> B_37_1538_0 = _rtP -> P_675 ; _rtB ->
+B_37_1546_0 = _rtP -> P_676 ; _rtB -> B_37_1547_0 = _rtP -> P_677 ; _rtB ->
+B_37_1548_0 = _rtP -> P_678 ; _rtB -> B_37_1549_0 = _rtP -> P_679 ; _rtB ->
+B_37_1567_0 = _rtP -> P_684 ; _rtB -> B_37_1570_0 = _rtP -> P_687 ; _rtB ->
+B_37_1573_0 = _rtP -> P_690 ; _rtB -> B_37_1576_0 = _rtP -> P_692 ; _rtB ->
 B_37_1580_0 = _rtP -> P_695 ; _rtB -> B_37_1583_0 = _rtP -> P_696 ; _rtB ->
 B_37_1585_0 = _rtP -> P_697 ; _rtB -> B_37_1591_0 = _rtP -> P_703 ; _rtB ->
 B_37_1593_0 = _rtP -> P_704 ; _rtB -> B_37_1598_0 = _rtP -> P_706 ; _rtB ->
@@ -2691,7 +2691,7 @@ HAMLceloopdelay_IWORK . Last , simTime - _rtP -> P_294 , tBuffer , uBuffer ,
 MaxNewBufSize ) ) { ssSetErrorStatus ( S , "tdelay memory allocation error" )
 ; return ; } } ( * tBuffer ) [ _rtDW -> HAMLceloopdelay_IWORK . Head ] =
 simTime ; ( * uBuffer ) [ _rtDW -> HAMLceloopdelay_IWORK . Head ] = _rtB ->
-B_37_1571_0 ; } { real_T * * uBuffer = ( real_T * * ) & _rtDW ->
+B_37_1572_0 ; } { real_T * * uBuffer = ( real_T * * ) & _rtDW ->
 HAMFmloopdelay_PWORK . TUbufferPtrs [ 0 ] ; real_T * * tBuffer = ( real_T * *
 ) & _rtDW -> HAMFmloopdelay_PWORK . TUbufferPtrs [ 1 ] ; real_T simTime =
 ssGetT ( S ) ; _rtDW -> HAMFmloopdelay_IWORK . Head = ( ( _rtDW ->
@@ -2706,7 +2706,7 @@ NULL ) , ( boolean_T ) 0 , false , & _rtDW -> HAMFmloopdelay_IWORK .
 MaxNewBufSize ) ) { ssSetErrorStatus ( S , "tdelay memory allocation error" )
 ; return ; } } ( * tBuffer ) [ _rtDW -> HAMFmloopdelay_IWORK . Head ] =
 simTime ; ( * uBuffer ) [ _rtDW -> HAMFmloopdelay_IWORK . Head ] = _rtB ->
-B_37_1568_0 ; } { real_T * * uBuffer = ( real_T * * ) & _rtDW ->
+B_37_1569_0 ; } { real_T * * uBuffer = ( real_T * * ) & _rtDW ->
 LKneeloopdelay_PWORK . TUbufferPtrs [ 0 ] ; real_T * * tBuffer = ( real_T * *
 ) & _rtDW -> LKneeloopdelay_PWORK . TUbufferPtrs [ 1 ] ; real_T simTime =
 ssGetT ( S ) ; _rtDW -> LKneeloopdelay_IWORK . Head = ( ( _rtDW ->
@@ -2954,7 +2954,7 @@ _rtB -> B_37_1066_0 ; _rtXdot -> Integrator_CSTATE_b = _rtB -> B_37_1344_0 ;
 _rtXdot -> Integrator_CSTATE_p = _rtB -> B_37_995_0 ; _rtXdot ->
 Integrator_CSTATE_j = _rtB -> B_37_1131_0 ; _rtXdot -> Integrator_CSTATE_js =
 _rtB -> B_37_1493_0 ; _rtXdot -> Integrator_CSTATE_h = _rtB -> B_37_1630_0 ;
-_rtXdot -> Integrator_CSTATE_i = _rtB -> B_37_1564_0 ; _rtXdot ->
+_rtXdot -> Integrator_CSTATE_i = _rtB -> B_37_1565_0 ; _rtXdot ->
 Integrator_CSTATE_hj = _rtB -> B_37_1855_0 ; _rtXdot -> Integrator_CSTATE_n =
 _rtB -> B_37_1427_0 ; _rtXdot -> Integrator_CSTATE_bt = _rtB -> B_37_1789_0 ;
 _rtXdot -> Integrator_CSTATE_be = _rtB -> B_37_1713_0 ; _rtXdot ->
@@ -3102,8 +3102,8 @@ _rtB -> B_37_1494_0 - _rtP -> P_650 ; _rtZCSV -> Switch_SwitchCond_ZC_m1 =
 _rtB -> B_37_1499_0 - _rtP -> P_653 ; _rtZCSV -> Switch_SwitchCond_ZC_mp =
 _rtB -> B_37_1502_0 - _rtP -> P_655 ; _rtZCSV -> Switch_SwitchCond_ZC_gs =
 _rtB -> B_37_1505_0 - _rtP -> P_657 ; _rtZCSV -> Switch_SwitchCond_ZC_av =
-_rtB -> B_37_1509_0 - _rtP -> P_659 ; _rtZCSV -> Abs_AbsZc_ZC_d = _rtB ->
-B_37_1515_0 ; _rtZCSV -> Switch_SwitchCond_ZC_mg = _rtB -> B_37_1565_0 - _rtP
+_rtB -> B_37_1510_0 - _rtP -> P_659 ; _rtZCSV -> Abs_AbsZc_ZC_d = _rtB ->
+B_37_1516_0 ; _rtZCSV -> Switch_SwitchCond_ZC_mg = _rtB -> B_37_1566_0 - _rtP
 -> P_685 ; _rtZCSV -> Switch_SwitchCond_ZC_np = _rtB -> B_37_1574_0 - _rtP ->
 P_691 ; _rtZCSV -> Switch_SwitchCond_ZC_b2 = _rtB -> B_37_1577_0 - _rtP ->
 P_693 ; _rtZCSV -> Abs_AbsZc_ZC_o = _rtB -> B_37_1581_0 ; _rtZCSV ->
@@ -3123,9 +3123,9 @@ P_798 ; _rtZCSV -> Switch_SwitchCond_ZC_le = _rtB -> B_37_1798_0 - _rtP ->
 P_801 ; _rtZCSV -> Switch_SwitchCond_ZC_fn = _rtB -> B_37_1801_0 - _rtP ->
 P_803 ; _rtZCSV -> Abs_AbsZc_ZC_o2 = _rtB -> B_37_1819_0 ; _rtZCSV ->
 Switch_SwitchCond_ZC_lg = _rtB -> B_37_1856_0 - _rtP -> P_828 ; } static void
-mdlInitializeSizes ( SimStruct * S ) { ssSetChecksumVal ( S , 0 , 2133310939U
-) ; ssSetChecksumVal ( S , 1 , 217666452U ) ; ssSetChecksumVal ( S , 2 ,
-3528661524U ) ; ssSetChecksumVal ( S , 3 , 2999003640U ) ; { mxArray *
+mdlInitializeSizes ( SimStruct * S ) { ssSetChecksumVal ( S , 0 , 2396308964U
+) ; ssSetChecksumVal ( S , 1 , 1962048977U ) ; ssSetChecksumVal ( S , 2 ,
+3119459329U ) ; ssSetChecksumVal ( S , 3 , 3381443204U ) ; { mxArray *
 slVerStructMat = NULL ; mxArray * slStrMat = mxCreateString ( "simulink" ) ;
 char slVerChar [ 10 ] ; int status = mexCallMATLAB ( 1 , & slVerStructMat , 1
 , & slStrMat , "ver" ) ; if ( status == 0 ) { mxArray * slVerMat = mxGetField
