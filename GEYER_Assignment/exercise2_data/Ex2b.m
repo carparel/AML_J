@@ -139,7 +139,7 @@ for muscle = 1:length(muscles)
         for nbr=1:nbr_cond
             current_HS =  HS_left.noise.(muscles{muscle}).(conditions{condition});
             for i = 1: length(current_HS) -1
-                Results.left.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 2./ (current_HS(i+1) - current_HS(i));
+                Results.left.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 1./ (current_HS(i+1) - current_HS(i));
             end
             stride_freq_total_left.noise.(muscles{muscle}).(conditions{condition}) = [stride_freq_total_left.noise.(muscles{muscle}).(conditions{condition}) , Results.left.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i)];
         end
@@ -157,7 +157,7 @@ stride_freq_total_left.no_noise = [];
 for nbr=1:nbr_cond
     current_HS =  HS_left.no_noise;
     for i = 1: length(current_HS) -1
-        Results.left.no_noise.stride_freq{nbr}(i) = 2./ (current_HS(i+1) - current_HS(i));
+        Results.left.no_noise.stride_freq{nbr}(i) = 1./ (current_HS(i+1) - current_HS(i));
     end
     stride_freq_total_left.no_noise = [stride_freq_total_left.no_noise , Results.left.no_noise.stride_freq{nbr}(i)];
 end
@@ -170,7 +170,7 @@ for muscle = 1:length(muscles)
         for nbr=1:nbr_cond
             current_HS =  HS_right.noise.(muscles{muscle}).(conditions{condition});
             for i = 1: length(current_HS) -1
-                Results.right.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 2./ (current_HS(i+1) - current_HS(i));
+                Results.right.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 1./ (current_HS(i+1) - current_HS(i));
             end
             stride_freq_total_right.noise.(muscles{muscle}).(conditions{condition}) = [stride_freq_total_right.noise.(muscles{muscle}).(conditions{condition}) , Results.right.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i)];
         end
@@ -189,7 +189,7 @@ stride_freq_total_right.no_noise = [];
 for nbr=1:nbr_cond
     current_HS =  HS_right.no_noise;
     for i = 1: length(current_HS) -1
-        Results.right.no_noise.stride_freq{nbr}(i) = 2./ (current_HS(i+1) - current_HS(i));
+        Results.right.no_noise.stride_freq{nbr}(i) = 1./ (current_HS(i+1) - current_HS(i));
     end
     stride_freq_total_right.no_noise = [stride_freq_total_right.no_noise , Results.right.no_noise.stride_freq{nbr}(i)];
 end
@@ -241,28 +241,28 @@ end
 % Left- noise
 for muscle = 1: length(muscles)
     for condition = 1: length(conditions)
-        current_mean_duration_stride =  2./(Results.left.noise.mean_stride_freq.(muscles{muscle}).(conditions{condition}));
+        current_mean_duration_stride =  1./(Results.left.noise.mean_stride_freq.(muscles{muscle}).(conditions{condition}));
         current_mean_speed_stride = Results.left.noise.walking_speed_left.(muscles{muscle}).(conditions{condition});
         Results.left.noise.mean_length_stride.(muscles{muscle}).(conditions{condition}) = current_mean_speed_stride * current_mean_duration_stride;
     end
 end
 
 % no noise
-current_mean_duration_stride =  2./(Results.left.no_noise.mean_stride_freq);
+current_mean_duration_stride =  1./(Results.left.no_noise.mean_stride_freq);
 current_mean_speed_stride = Results.left.no_noise.walking_speed_left;
 Results.left.no_noise.mean_length_stride = current_mean_speed_stride * current_mean_duration_stride;
 
 % Right
 for muscle = 1: length(muscles)
     for condition = 1: length(conditions)
-        current_mean_duration_stride =  2./(Results.right.noise.mean_stride_freq.(muscles{muscle}).(conditions{condition}));
+        current_mean_duration_stride =  1./(Results.right.noise.mean_stride_freq.(muscles{muscle}).(conditions{condition}));
         current_mean_speed_stride = Results.right.noise.walking_speed_right.(muscles{muscle}).(conditions{condition});
         Results.right.noise.mean_length_stride.(muscles{muscle}).(conditions{condition}) = current_mean_speed_stride * current_mean_duration_stride;
     end
 end
 
 % no noise
-current_mean_duration_stride =  2./(Results.right.no_noise.mean_stride_freq);
+current_mean_duration_stride =  1./(Results.right.no_noise.mean_stride_freq);
 current_mean_speed_stride = Results.right.no_noise.walking_speed_right;
 Results.right.no_noise.mean_length_stride = current_mean_speed_stride * current_mean_duration_stride;
 
@@ -322,5 +322,32 @@ Walking_speed.noise_right_HAM_s_f = Results.right.noise.walking_speed_right.HAM.
 Walking_speed.noise_right_HAM_a_f = Results.right.noise.walking_speed_right.HAM.asymetric_f;
 Walking_speed.noise_right_HAM_s_s = Results.right.noise.walking_speed_right.HAM.symetric_s;
 Walking_speed.noise_right_HAM_a_s = Results.right.noise.walking_speed_right.HAM.asymetric_s;
+
+%% Duration
+% No noise
+Stride_duration.no_noise_left = 1./ (Results.left.no_noise.mean_stride_freq);
+Stride_duration.no_noise_right = 1./ (Results.right.no_noise.mean_stride_freq);
+
+% Noise - left TA
+Stride_duration.noise_left_TA_s_f = 1./ (Results.left.noise.mean_stride_freq.TA.symetric_f);
+Stride_duration.noise_left_TA_a_f = 1./(Results.left.noise.mean_stride_freq.TA.asymetric_f);
+Stride_duration.noise_left_TA_s_s = 1./(Results.left.noise.mean_stride_freq.TA.symetric_s);
+Stride_duration.noise_left_TA_a_s = 1./(Results.left.noise.mean_stride_freq.TA.asymetric_s);
+% Noise - right TA
+Stride_duration.noise_right_TA_s_f = 1./(Results.right.noise.mean_stride_freq.TA.symetric_f);
+Stride_duration.noise_right_TA_a_f = 1./(Results.right.noise.mean_stride_freq.TA.asymetric_f);
+Stride_duration.noise_right_TA_s_s = 1./(Results.right.noise.mean_stride_freq.TA.symetric_s);
+Stride_duration.noise_right_TA_a_s = 1./(Results.right.noise.mean_stride_freq.TA.asymetric_s);
+
+% Noise - left HAM
+Stride_duration.noise_left_HAM_s_f = 1./(Results.left.noise.mean_stride_freq.HAM.symetric_f);
+Stride_duration.noise_left_HAM_a_f = 1./(Results.left.noise.mean_stride_freq.HAM.asymetric_f);
+Stride_duration.noise_left_HAM_s_s = 1./(Results.left.noise.mean_stride_freq.HAM.symetric_s);
+Stride_duration.noise_left_HAM_a_s = 1./(Results.left.noise.mean_stride_freq.HAM.asymetric_s);
+% Noise - right HAM
+Stride_duration.noise_right_HAM_s_f = 1./Results.right.noise.mean_stride_freq.HAM.symetric_f;
+Stride_duration.noise_right_HAM_a_f = 1./Results.right.noise.mean_stride_freq.HAM.asymetric_f;
+Stride_duration.noise_right_HAM_s_s = 1./Results.right.noise.mean_stride_freq.HAM.symetric_s;
+Stride_duration.noise_right_HAM_a_s = 1./Results.right.noise.mean_stride_freq.HAM.asymetric_s;
 
 
