@@ -167,7 +167,7 @@ for muscle = 1: length(muscles)
     indices_right = 1:1:length(mean_muscles_right.(muscles{muscle}));
     indices_right = (indices_right/nbr_points)*100;
     figure;
-    plot(indices_right,mean_muscles_right.(muscles{muscle}),'k','LineWidth',1.2);
+    plot(indices_right,mean_muscles_right.(muscles{muscle}),'k','LineWidth',1.5);
     fill_x = [indices_right,fliplr(indices_right)];
     fill_y = [mean_muscles_right.(muscles{muscle}) - std_muscles_right.(muscles{muscle}),fliplr((mean_muscles_right.(muscles{muscle}) + std_muscles_right.(muscles{muscle})))];
     patch(fill_x,fill_y,'k','EdgeColor','none');
@@ -175,19 +175,23 @@ for muscle = 1: length(muscles)
     hold on;
     indices_left = 1:1:length(mean_muscles_left.(muscles{muscle}));
     indices_left = (indices_left/nbr_points)*100;
-    plot(indices_left,mean_muscles_left.(muscles{muscle}),'b','LineWidth',1.2);
+    plot(indices_left,mean_muscles_left.(muscles{muscle}),'b','LineWidth',1.5);
+    
     fill_x = [indices_left,fliplr(indices_left)];
     fill_y = [mean_muscles_left.(muscles{muscle}) - std_muscles_left.(muscles{muscle}),fliplr((mean_muscles_left.(muscles{muscle}) + std_muscles_left.(muscles{muscle})))];
     patch(fill_x,fill_y,'b','EdgeColor','none');
     alpha(.1)
     
+    line([60 60], [0 1],'Color','red','LineStyle','--','LineWidth',1.5)
+    
     ax = gca;
     ax.FontSize = 40;
     axis([0 100 0 1])
-    xlabel('% Stride');
-    ylabel('Activity');
-    legend('Average right muscle','Std right muscle','Average left muscle','Std left muscle');
-    title({'Average activity for ',num2str(muscles{muscle})});
+    set(gca,'TickLabelInterpreter', 'latex');
+    xlabel('\% Stride','interpreter','latex');
+    ylabel('Activity','interpreter','latex');
+    legend('Average right muscle','Std right muscle','Average left muscle','Std left muscle','Location','Best','interpreter','latex');
+    title({'Average activity for ',num2str(muscles{muscle})},'interpreter','latex');
     set(gcf,'Position',[0 0 1600 800]);
     saveas(gcf,['Activity', num2str(muscles{muscle})],'png');
 end
@@ -234,7 +238,7 @@ for angle = 1: length(angles)
     indices_right = 1:1:length(mean_angles_right.(angles{angle}));
     indices_right = (indices_right/nbr_points)*100;
     figure;
-    plot(indices_right,mean_angles_right.(angles{angle}),'k','LineWidth',1.2);
+    plot(indices_right,mean_angles_right.(angles{angle}),'k','LineWidth',1.5);
     fill_x = [indices_right,fliplr(indices_right)];
     fill_y = [mean_angles_right.(angles{angle}) - std_angles_right.(angles{angle}),fliplr((mean_angles_right.(angles{angle}) + std_angles_right.(angles{angle})))];
     patch(fill_x,fill_y,'k','EdgeColor','none');
@@ -242,18 +246,24 @@ for angle = 1: length(angles)
     hold on;
     indices_left = 1:1:length(mean_angles_left.(angles{angle}));
     indices_left = (indices_left/nbr_points)*100;
-    plot(indices_left,mean_angles_left.(angles{angle}),'b','LineWidth',1.2);
+    plot(indices_left,mean_angles_left.(angles{angle}),'b','LineWidth',1.5);
     fill_x = [indices_left,fliplr(indices_left)];
     fill_y = [mean_angles_left.(angles{angle}) - std_angles_left.(angles{angle}),fliplr((mean_angles_left.(angles{angle}) + std_angles_left.(angles{angle})))];
     patch(fill_x,fill_y,'b','EdgeColor','none');
     alpha(.1)
+    
+    y_min = min(mean_angles_left.(angles{angle}))- 10;
+    y_max = max(mean_angles_left.(angles{angle})) + 10;
+    axis([0 100 y_min y_max])
+    
+    line([60 60],[y_min y_max],'Color','red','LineStyle','--','LineWidth',1.5)
     ax = gca;
     ax.FontSize = 40;
-    
-    xlabel('% Stride');
-    ylabel('Degrees');
-    title({'Average activity for',num2str(angles{angle})});
-    legend('Average right angle','Std right angle','Average left angle','Std left angle','Location','Best');
+    set(gca,'TickLabelInterpreter', 'latex');
+    xlabel('\% Stride','interpreter','latex');
+    ylabel('Degrees','interpreter','latex');
+    legend('Average right angle','Std right angle','Average left angle','Std left angle','Location','Best','interpreter','latex');
+    title({'Average activity for ',num2str(angles{angle})},'interpreter','latex');
     set(gcf,'Position',[0 0 1600 800]);
     saveas(gcf,['Activity', num2str(angles{angle})],'png');
 end
@@ -302,7 +312,7 @@ for torque= 1: length(torques)
     indices_right = 1:1:length(mean_torques_right.(torques{torque}));
     indices_right = (indices_right/nbr_points)*100;
     figure;
-    plot(indices_right,mean_torques_right.(torques{torque}),'k','LineWidth',1.2);
+    plot(indices_right,mean_torques_right.(torques{torque}),'k','LineWidth',1.5);
     fill_x = [indices_right,fliplr(indices_right)];
     fill_y = [mean_torques_right.(torques{torque}) - std_torques_right.(torques{torque}),fliplr((mean_torques_right.(torques{torque}) + std_torques_right.(torques{torque})))];
     patch(fill_x,fill_y,'k','EdgeColor','none');
@@ -310,19 +320,28 @@ for torque= 1: length(torques)
     hold on;
     indices_left = 1:1:length(mean_torques_left.(torques{torque}));
     indices_left = (indices_left/nbr_points)*100;
-    plot(indices_left,mean_torques_left.(torques{torque}),'b','LineWidth',1.2);
+    plot(indices_left,mean_torques_left.(torques{torque}),'b','LineWidth',1.5);
     fill_x = [indices_left,fliplr(indices_left)];
     fill_y = [mean_torques_left.(torques{torque}) - std_torques_left.(torques{torque}),fliplr((mean_torques_left.(torques{torque}) + std_torques_left.(torques{torque})))];
     patch(fill_x,fill_y,'b','EdgeColor','none');
     alpha(.1)
+    
+    
+    y_min = min(mean_torques_left.(torques{torque}))- 10;
+    y_max = max(mean_torques_left.(torques{torque})) + 10;
+    axis([0 100 y_min y_max])
+    
+    line([60 60],[y_min y_max],'Color','red','LineStyle','--','LineWidth',1.5)
     ax = gca;
     ax.FontSize = 40;
-    xlabel('% Stride');
-    ylabel('Torque');
-    title({'Average activity for ',num2str(torques{torque})});
-    legend('Average right torque','Std right torque','Average left torque','Std left torque');
+    set(gca,'TickLabelInterpreter', 'latex');
+    xlabel('\% Stride','interpreter','latex');
+    ylabel('Torque','interpreter','latex');
+    legend('Average right torque','Std right torque','Average left torque','Std left torque','Location','Best','interpreter','latex');
+    title({'Average activity for ',num2str(torques{torque})},'interpreter','latex');
     set(gcf,'Position',[0 0 1600 800]);
     saveas(gcf,['Activity', num2str(torques{torque})],'png');
+    
 end
 
 
