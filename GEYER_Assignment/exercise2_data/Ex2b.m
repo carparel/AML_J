@@ -139,7 +139,7 @@ for muscle = 1:length(muscles)
         for nbr=1:nbr_cond
             current_HS =  HS_left.noise.(muscles{muscle}).(conditions{condition});
             for i = 1: length(current_HS) -1
-                Results.left.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 1./ (current_HS(i+1) - current_HS(i));
+                Results.left.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 2./ (current_HS(i+1) - current_HS(i));
             end
             stride_freq_total_left.noise.(muscles{muscle}).(conditions{condition}) = [stride_freq_total_left.noise.(muscles{muscle}).(conditions{condition}) , Results.left.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i)];
         end
@@ -157,7 +157,7 @@ stride_freq_total_left.no_noise = [];
 for nbr=1:nbr_cond
     current_HS =  HS_left.no_noise;
     for i = 1: length(current_HS) -1
-        Results.left.no_noise.stride_freq{nbr}(i) = 1./ (current_HS(i+1) - current_HS(i));
+        Results.left.no_noise.stride_freq{nbr}(i) = 2./ (current_HS(i+1) - current_HS(i));
     end
     stride_freq_total_left.no_noise = [stride_freq_total_left.no_noise , Results.left.no_noise.stride_freq{nbr}(i)];
 end
@@ -170,7 +170,7 @@ for muscle = 1:length(muscles)
         for nbr=1:nbr_cond
             current_HS =  HS_right.noise.(muscles{muscle}).(conditions{condition});
             for i = 1: length(current_HS) -1
-                Results.right.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 1./ (current_HS(i+1) - current_HS(i));
+                Results.right.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 2./ (current_HS(i+1) - current_HS(i));
             end
             stride_freq_total_right.noise.(muscles{muscle}).(conditions{condition}) = [stride_freq_total_right.noise.(muscles{muscle}).(conditions{condition}) , Results.right.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i)];
         end
@@ -189,7 +189,7 @@ stride_freq_total_right.no_noise = [];
 for nbr=1:nbr_cond
     current_HS =  HS_right.no_noise;
     for i = 1: length(current_HS) -1
-        Results.right.no_noise.stride_freq{nbr}(i) = 1./ (current_HS(i+1) - current_HS(i));
+        Results.right.no_noise.stride_freq{nbr}(i) = 2./ (current_HS(i+1) - current_HS(i));
     end
     stride_freq_total_right.no_noise = [stride_freq_total_right.no_noise , Results.right.no_noise.stride_freq{nbr}(i)];
 end
@@ -215,9 +215,6 @@ for nbr=1:nbr_cond
     current_mean_freq_stride =  Results.left.no_noise.mean_stride_freq;
     Results.left.no_noise.walking_speed_left = ((current_mean_freq_stride)./alpha).^(1/beta);
 end
-
-
-
 
 
 % Right

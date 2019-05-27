@@ -261,7 +261,7 @@ axis([XMIN XMAX YMIN YMAX])
 set(gca,'TickLabelInterpreter', 'latex')
 set(gcf,'Position',[0 0 1600 800]);
 xlabel('time [s]','interpreter','latex')
-ylabel('GRF','interpreter','latex')
+ylabel('GRF [N]','interpreter','latex')
 title('Comparison between running and walking','interpreter','latex')
 saveas(gcf,'running_walking','png');
 
