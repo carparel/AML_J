@@ -9,7 +9,7 @@ close all;
 %% Loading structures
 nbr_cond = 8;
 
-% LOADING HAM MUSCLES with 4 conditions
+% LOADING HAM MUSCLES with 4 conditions, with noise
 a = load('struct_mRFX_HAM_asymetric_feedback.mat');
 struct.noise.HAM.asymetric_f = a.struct_mRFX_HAM_asymetric_feedback;
 b = load('struct_mRFX_HAM_asymetric_stimulation.mat');
@@ -19,7 +19,7 @@ struct.noise.HAM.symetric_f = c.struct_mRFX_HAM_symetric_feedback;
 d = load('struct_mRFX_HAM_symetric_stimulation.mat');
 struct.noise.HAM.symetric_s = d.struct_mRFX_HAM_symetric_stimulation;
 
-% LOADING TA MUSCLES with 4 conditions
+% LOADING TA MUSCLES with 4 conditions, with noise
 f = load('struct_mRFX_TA_asymetric_feedback.mat');
 struct.noise.TA.asymetric_f = f.struct_mRFX_TA_asymetric_feedback;
 g = load('struct_mRFX_TA_asymetric_stimulation.mat');
@@ -29,6 +29,26 @@ struct.noise.TA.symetric_f = h.struct_mRFX_TA_symetric_feedback;
 j = load('struct_mRFX_TA_symetric_stimulation.mat');
 struct.noise.TA.symetric_s = j.struct_mRFX_TA_symetric_stimulation;
 
+% LOADING HAM MUSCLES with 4 conditions, with low noise
+k = load('struct_mRFX_HAM_asymetric_feedback_low.mat');
+struct.low_noise.HAM.asymetric_f = k.struct_mRFX_HAM_asymetric_feedback_low;
+l = load('struct_mRFX_HAM_asymetric_stimulation_low.mat');
+struct.low_noise.HAM.asymetric_s = l.struct_mRFX_HAM_asymetric_stimulation_low;
+m = load('struct_mRFX_HAM_symetric_feedback_low.mat');
+struct.low_noise.HAM.symetric_f = m.struct_mRFX_HAM_symetric_feedback_low;
+n = load('struct_mRFX_HAM_symetric_stimulation_low.mat');
+struct.low_noise.HAM.symetric_s = n.struct_mRFX_HAM_symetric_stimulation_low;
+
+% LOADING TA MUSCLES with 4 conditions, with low noise
+o = load('struct_mRFX_TA_asymetric_feedback_low.mat');
+struct.low_noise.TA.asymetric_f = o.struct_mRFX_TA_asymetric_feedback_low;
+p = load('struct_mRFX_TA_asymetric_stimulation_low.mat');
+struct.low_noise.TA.asymetric_s = p.struct_mRFX_TA_asymetric_stimulation_low;
+q = load('struct_mRFX_TA_symetric_feedback_low.mat');
+struct.low_noise.TA.symetric_f = q.struct_mRFX_TA_symetric_feedback_low;
+r = load('struct_mRFX_TA_symetric_stimulation_low.mat');
+struct.low_noise.TA.symetric_s = r.struct_mRFX_TA_symetric_stimulation_low;
+
 % To check, also loading struct_mRFX no noise
 z =  load('struct_mRFX');
 struct.no_noise = z.struct_mRFX;
@@ -37,13 +57,15 @@ struct.no_noise = z.struct_mRFX;
 
 muscles = {'HAM','TA'};
 conditions = {'asymetric_f','asymetric_s','symetric_f','symetric_s'};
-perturbation = {'noise','no_noise'};
+perturbations = {'noise','low_noise'};
 
 % Noise
 for muscle = 1: length(muscles)
     for condition = 1: length(conditions)
-        indices_stance_left.noise.(muscles{muscle}).(conditions{condition}) = find(struct.noise.(muscles{muscle}).(conditions{condition}).LStance == 1);
-        indices_stance_right.noise.(muscles{muscle}).(conditions{condition}) = find(struct.noise.(muscles{muscle}).(conditions{condition}).RStance == 1);
+        for perturbation = 1:length(perturbations)
+            indices_stance_left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}) = find(struct.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}).LStance == 1);
+            indices_stance_right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}) = find(struct.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}).RStance == 1);
+        end
     end
 end
 % No noise
@@ -54,24 +76,26 @@ indices_stance_right.no_noise = find(struct.no_noise.RStance == 1);
 % For the left foot
 for muscle = 1: length(muscles)
     for condition = 1: length(conditions)
-        HS_left.noise.(muscles{muscle}).(conditions{condition}) = [];
-        for i = 1:length(indices_stance_left.noise.(muscles{muscle}).(conditions{condition}))-1
-            if (indices_stance_left.noise.(muscles{muscle}).(conditions{condition})(i+1) - indices_stance_left.noise.(muscles{muscle}).(conditions{condition})(i) > 1)
-                ind = indices_stance_left.noise.(muscles{muscle}).(conditions{condition})(i+1);
-                if (i+101<=length(indices_stance_left.noise.(muscles{muscle}).(conditions{condition})))
-                    test = struct.noise.(muscles{muscle}).(conditions{condition}).LStance(ind:ind+100);
-                    if (~(ismember(0,test)))
-                        HS_left.noise.(muscles{muscle}).(conditions{condition}) = [HS_left.noise.(muscles{muscle}).(conditions{condition}), indices_stance_left.noise.(muscles{muscle}).(conditions{condition})(i+1)];
+        for perturbation = 1:length(perturbations)
+            HS_left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}) = [];
+            for i = 1:length(indices_stance_left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}))-1
+                if (indices_stance_left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition})(i+1) - indices_stance_left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition})(i) > 1)
+                    ind = indices_stance_left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition})(i+1);
+                    if (i+101<=length(indices_stance_left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition})))
+                        test = struct.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}).LStance(ind:ind+100);
+                        if (~(ismember(0,test)))
+                            HS_left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}) = [HS_left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}), indices_stance_left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition})(i+1)];
+                        end
                     end
                 end
             end
         end
         %uncomment to visualize the HS detections
-%         figure;
-%         plot(struct.noise.(muscles{muscle}).(conditions{condition}).LStance);
-%         title(strcat('LEFT: muscle ', num2str(muscle), ', condition ', num2str(condition)));
-%         hold on
-%         scatter(HS_left.(muscles{muscle}).(conditions{condition}), ones(1,length(HS_left.(muscles{muscle}).(conditions{condition}))));
+        %         figure;
+        %         plot(struct.noise.(muscles{muscle}).(conditions{condition}).LStance);
+        %         title(strcat('LEFT: muscle ', num2str(muscle), ', condition ', num2str(condition)));
+        %         hold on
+        %         scatter(HS_left.(muscles{muscle}).(conditions{condition}), ones(1,length(HS_left.(muscles{muscle}).(conditions{condition}))));
     end
 end
 
@@ -92,24 +116,26 @@ end
 % For the right foot
 for muscle = 1: length(muscles)
     for condition = 1: length(conditions)
-        HS_right.noise.(muscles{muscle}).(conditions{condition}) = [];
-        for i = 1:length(indices_stance_right.noise.(muscles{muscle}).(conditions{condition}))-1
-            if (indices_stance_right.noise.(muscles{muscle}).(conditions{condition})(i+1) - indices_stance_right.noise.(muscles{muscle}).(conditions{condition})(i) > 1)
-                ind = indices_stance_right.noise.(muscles{muscle}).(conditions{condition})(i+1);
-                if (i+101<=length(indices_stance_right.noise.(muscles{muscle}).(conditions{condition})))
-                    test = struct.noise.(muscles{muscle}).(conditions{condition}).RStance(ind:ind+100);
-                    if (~(ismember(0,test)))
-                        HS_right.noise.(muscles{muscle}).(conditions{condition}) = [HS_right.noise.(muscles{muscle}).(conditions{condition}), indices_stance_right.noise.(muscles{muscle}).(conditions{condition})(i+1)];
+        for perturbation = 1:length(perturbations)
+            HS_right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}) = [];
+            for i = 1:length(indices_stance_right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}))-1
+                if (indices_stance_right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition})(i+1) - indices_stance_right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition})(i) > 1)
+                    ind = indices_stance_right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition})(i+1);
+                    if (i+101<=length(indices_stance_right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition})))
+                        test = struct.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}).RStance(ind:ind+100);
+                        if (~(ismember(0,test)))
+                            HS_right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}) = [HS_right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}), indices_stance_right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition})(i+1)];
+                        end
                     end
                 end
             end
         end
         %uncomment to visualize the HS detections
-%         figure;
-%         plot(struct.noise.(muscles{muscle}).(conditions{condition}).LStance);
-%         title(strcat('RIGHT: muscle ', num2str(muscle), ', condition ', num2str(condition)));
-%         hold on
-%         scatter(HS_left.(muscles{muscle}).(conditions{condition}), ones(1,length(HS_left.(muscles{muscle}).(conditions{condition}))));
+        %         figure;
+        %         plot(struct.noise.(muscles{muscle}).(conditions{condition}).LStance);
+        %         title(strcat('RIGHT: muscle ', num2str(muscle), ', condition ', num2str(condition)));
+        %         hold on
+        %         scatter(HS_left.(muscles{muscle}).(conditions{condition}), ones(1,length(HS_left.(muscles{muscle}).(conditions{condition}))));
     end
 end
 
@@ -130,24 +156,28 @@ end
 %% stride freq
 
 nbr_cond = 8;
-sample_freq = 100; % 100 Hz
+sample_freq = 1000; % 100 Hz
 
 % Left foot- noise
 for muscle = 1:length(muscles)
     for condition = 1: length(conditions)
-        stride_freq_total_left.noise.(muscles{muscle}).(conditions{condition}) = [];
-        for nbr=1:nbr_cond
-            current_HS =  HS_left.noise.(muscles{muscle}).(conditions{condition});
-            for i = 1: length(current_HS) -1
-                Results.left.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 1./ (current_HS(i+1) - current_HS(i));
+        for perturbation = 1: length(perturbations)
+            stride_freq_total_left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}) = [];
+            for nbr=1:nbr_cond
+                current_HS =  HS_left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition});
+                for i = 1: length(current_HS) -1
+                    Results.left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 1./ (current_HS(i+1) - current_HS(i));
+                end
+                stride_freq_total_left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}) = [stride_freq_total_left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}) , Results.left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i)];
             end
-            stride_freq_total_left.noise.(muscles{muscle}).(conditions{condition}) = [stride_freq_total_left.noise.(muscles{muscle}).(conditions{condition}) , Results.left.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i)];
         end
     end
 end
 for muscle = 1:length(muscles)
     for condition = 1: length(conditions)
-        Results.left.noise.mean_stride_freq.(muscles{muscle}).(conditions{condition}) = sample_freq *  mean((stride_freq_total_left.noise.(muscles{muscle}).(conditions{condition})));
+        for perturbation = 1: length(perturbations)
+            Results.left.(perturbations{perturbation}).mean_stride_freq.(muscles{muscle}).(conditions{condition}) = sample_freq *  mean((stride_freq_total_left.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition})));
+        end
     end
 end
 
@@ -166,20 +196,23 @@ Results.left.no_noise.mean_stride_freq = sample_freq *  mean((stride_freq_total_
 % Right foot
 for muscle = 1:length(muscles)
     for condition = 1: length(conditions)
-        stride_freq_total_right.noise.(muscles{muscle}).(conditions{condition}) = [];
-        for nbr=1:nbr_cond
-            current_HS =  HS_right.noise.(muscles{muscle}).(conditions{condition});
-            for i = 1: length(current_HS) -1
-                Results.right.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 1./ (current_HS(i+1) - current_HS(i));
+        for perturbation = 1: length(perturbations)
+            stride_freq_total_right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}) = [];
+            for nbr=1:nbr_cond
+                current_HS =  HS_right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition});
+                for i = 1: length(current_HS) -1
+                    Results.right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i) = 1./ (current_HS(i+1) - current_HS(i));
+                end
+                stride_freq_total_right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}) = [stride_freq_total_right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}) , Results.right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i)];
             end
-            stride_freq_total_right.noise.(muscles{muscle}).(conditions{condition}) = [stride_freq_total_right.noise.(muscles{muscle}).(conditions{condition}) , Results.right.noise.(muscles{muscle}).(conditions{condition}).stride_freq{nbr}(i)];
         end
-        
     end
 end
 for muscle = 1:length(muscles)
     for condition = 1: length(conditions)
-        Results.right.noise.mean_stride_freq.(muscles{muscle}).(conditions{condition}) = sample_freq*mean((stride_freq_total_right.noise.(muscles{muscle}).(conditions{condition})));
+        for perturbation = 1: length(perturbations)
+            Results.right.(perturbations{perturbation}).mean_stride_freq.(muscles{muscle}).(conditions{condition}) = sample_freq*mean((stride_freq_total_right.(perturbations{perturbation}).(muscles{muscle}).(conditions{condition})));
+        end
     end
 end
 
@@ -203,9 +236,11 @@ alpha = 0.85;
 beta = 0.5;
 for muscle = 1: length(muscles)
     for condition = 1: length(conditions)
-        for nbr=1:nbr_cond
-            current_mean_freq_stride =  Results.left.noise.mean_stride_freq.(muscles{muscle}).(conditions{condition});
-            Results.left.noise.walking_speed_left.(muscles{muscle}).(conditions{condition})= ((current_mean_freq_stride)./alpha).^(1/beta);
+        for perturbation = 1: length(perturbations)
+            for nbr=1:nbr_cond
+                current_mean_freq_stride =  Results.left.(perturbations{perturbation}).mean_stride_freq.(muscles{muscle}).(conditions{condition});
+                Results.left.(perturbations{perturbation}).walking_speed_left.(muscles{muscle}).(conditions{condition})= ((current_mean_freq_stride)./alpha).^(1/beta);
+            end
         end
     end
 end
@@ -223,9 +258,11 @@ alpha = 0.85;
 beta = 0.5;
 for muscle = 1: length(muscles)
     for condition = 1: length(conditions)
-        for nbr=1:nbr_cond
-            current_mean_freq_stride =  Results.right.noise.mean_stride_freq.(muscles{muscle}).(conditions{condition});
-            Results.right.noise.walking_speed_right.(muscles{muscle}).(conditions{condition}) =  ((current_mean_freq_stride)./alpha).^(1/beta);
+        for perturbation = 1: length(perturbations)
+            for nbr=1:nbr_cond
+                current_mean_freq_stride =  Results.right.(perturbations{perturbation}).mean_stride_freq.(muscles{muscle}).(conditions{condition});
+                Results.right.(perturbations{perturbation}).walking_speed_right.(muscles{muscle}).(conditions{condition}) =  ((current_mean_freq_stride)./alpha).^(1/beta);
+            end
         end
     end
 end
@@ -241,9 +278,11 @@ end
 % Left- noise
 for muscle = 1: length(muscles)
     for condition = 1: length(conditions)
-        current_mean_duration_stride =  1./(Results.left.noise.mean_stride_freq.(muscles{muscle}).(conditions{condition}));
-        current_mean_speed_stride = Results.left.noise.walking_speed_left.(muscles{muscle}).(conditions{condition});
-        Results.left.noise.mean_length_stride.(muscles{muscle}).(conditions{condition}) = current_mean_speed_stride * current_mean_duration_stride;
+        for perturbation = 1: length(perturbations)
+            current_mean_duration_stride =  1./(Results.left.(perturbations{perturbation}).mean_stride_freq.(muscles{muscle}).(conditions{condition}));
+            current_mean_speed_stride = Results.left.(perturbations{perturbation}).walking_speed_left.(muscles{muscle}).(conditions{condition});
+            Results.left.(perturbations{perturbation}).mean_length_stride.(muscles{muscle}).(conditions{condition}) = current_mean_speed_stride * current_mean_duration_stride;
+        end
     end
 end
 
@@ -255,9 +294,11 @@ Results.left.no_noise.mean_length_stride = current_mean_speed_stride * current_m
 % Right
 for muscle = 1: length(muscles)
     for condition = 1: length(conditions)
-        current_mean_duration_stride =  1./(Results.right.noise.mean_stride_freq.(muscles{muscle}).(conditions{condition}));
-        current_mean_speed_stride = Results.right.noise.walking_speed_right.(muscles{muscle}).(conditions{condition});
-        Results.right.noise.mean_length_stride.(muscles{muscle}).(conditions{condition}) = current_mean_speed_stride * current_mean_duration_stride;
+        for perturbation = 1: length(perturbations)
+            current_mean_duration_stride =  1./(Results.right.(perturbations{perturbation}).mean_stride_freq.(muscles{muscle}).(conditions{condition}));
+            current_mean_speed_stride = Results.right.(perturbations{perturbation}).walking_speed_right.(muscles{muscle}).(conditions{condition});
+            Results.right.(perturbations{perturbation}).mean_length_stride.(muscles{muscle}).(conditions{condition}) = current_mean_speed_stride * current_mean_duration_stride;
+        end
     end
 end
 
@@ -278,22 +319,42 @@ Stride_length.noise_left_TA_s_f = Results.left.noise.mean_length_stride.TA.symet
 Stride_length.noise_left_TA_a_f = Results.left.noise.mean_length_stride.TA.asymetric_f;
 Stride_length.noise_left_TA_s_s = Results.left.noise.mean_length_stride.TA.symetric_s;
 Stride_length.noise_left_TA_a_s = Results.left.noise.mean_length_stride.TA.asymetric_s;
+% Low noise - left TA
+Stride_length.low_noise_left_TA_s_f = Results.left.low_noise.mean_length_stride.TA.symetric_f;
+Stride_length.low_noise_left_TA_a_f = Results.left.low_noise.mean_length_stride.TA.asymetric_f;
+Stride_length.low_noise_left_TA_s_s = Results.left.low_noise.mean_length_stride.TA.symetric_s;
+Stride_length.low_noise_left_TA_a_s = Results.left.low_noise.mean_length_stride.TA.asymetric_s;
 % Noise - right TA
 Stride_length.noise_right_TA_s_f = Results.right.noise.mean_length_stride.TA.symetric_f;
 Stride_length.noise_right_TA_a_f = Results.right.noise.mean_length_stride.TA.asymetric_f;
 Stride_length.noise_right_TA_s_s = Results.right.noise.mean_length_stride.TA.symetric_s;
 Stride_length.noise_right_TA_a_s = Results.right.noise.mean_length_stride.TA.asymetric_s;
+% Low noise - right TA
+Stride_length.low_noise_right_TA_s_f = Results.right.low_noise.mean_length_stride.TA.symetric_f;
+Stride_length.low_noise_right_TA_a_f = Results.right.low_noise.mean_length_stride.TA.asymetric_f;
+Stride_length.low_noise_right_TA_s_s = Results.right.low_noise.mean_length_stride.TA.symetric_s;
+Stride_length.low_noise_right_TA_a_s = Results.right.low_noise.mean_length_stride.TA.asymetric_s;
 
 % Noise - left HAM
 Stride_length.noise_left_HAM_s_f = Results.left.noise.mean_length_stride.HAM.symetric_f;
 Stride_length.noise_left_HAM_a_f = Results.left.noise.mean_length_stride.HAM.asymetric_f;
 Stride_length.noise_left_HAM_s_s = Results.left.noise.mean_length_stride.HAM.symetric_s;
 Stride_length.noise_left_HAM_a_s = Results.left.noise.mean_length_stride.HAM.asymetric_s;
+% Low noise - left HAM
+Stride_length.low_noise_left_HAM_s_f = Results.left.low_noise.mean_length_stride.HAM.symetric_f;
+Stride_length.low_noise_left_HAM_a_f = Results.left.low_noise.mean_length_stride.HAM.asymetric_f;
+Stride_length.low_noise_left_HAM_s_s = Results.left.low_noise.mean_length_stride.HAM.symetric_s;
+Stride_length.low_noise_left_HAM_a_s = Results.left.low_noise.mean_length_stride.HAM.asymetric_s;
 % Noise - right HAM
 Stride_length.noise_right_HAM_s_f = Results.right.noise.mean_length_stride.HAM.symetric_f;
 Stride_length.noise_right_HAM_a_f = Results.right.noise.mean_length_stride.HAM.asymetric_f;
 Stride_length.noise_right_HAM_s_s = Results.right.noise.mean_length_stride.HAM.symetric_s;
 Stride_length.noise_right_HAM_a_s = Results.right.noise.mean_length_stride.HAM.asymetric_s;
+% Low noise - right HAM
+Stride_length.low_noise_right_HAM_s_f = Results.right.low_noise.mean_length_stride.HAM.symetric_f;
+Stride_length.low_noise_right_HAM_a_f = Results.right.low_noise.mean_length_stride.HAM.asymetric_f;
+Stride_length.low_noise_right_HAM_s_s = Results.right.low_noise.mean_length_stride.HAM.symetric_s;
+Stride_length.low_noise_right_HAM_a_s = Results.right.low_noise.mean_length_stride.HAM.asymetric_s;
 
 %% We could also be interested in the speed
 
@@ -306,22 +367,42 @@ Walking_speed.noise_left_TA_s_f = Results.left.noise.walking_speed_left.TA.symet
 Walking_speed.noise_left_TA_a_f = Results.left.noise.walking_speed_left.TA.asymetric_f;
 Walking_speed.noise_left_TA_s_s = Results.left.noise.walking_speed_left.TA.symetric_s;
 Walking_speed.noise_left_TA_a_s = Results.left.noise.walking_speed_left.TA.asymetric_s;
+% Low noise - left TA
+Walking_speed.low_noise_left_TA_s_f = Results.left.low_noise.walking_speed_left.TA.symetric_f;
+Walking_speed.low_noise_left_TA_a_f = Results.left.low_noise.walking_speed_left.TA.asymetric_f;
+Walking_speed.low_noise_left_TA_s_s = Results.left.low_noise.walking_speed_left.TA.symetric_s;
+Walking_speed.low_noise_left_TA_a_s = Results.left.low_noise.walking_speed_left.TA.asymetric_s;
 % Noise - right TA
 Walking_speed.noise_right_TA_s_f = Results.right.noise.walking_speed_right.TA.symetric_f;
 Walking_speed.noise_right_TA_a_f = Results.right.noise.walking_speed_right.TA.asymetric_f;
 Walking_speed.noise_right_TA_s_s = Results.right.noise.walking_speed_right.TA.symetric_s;
 Walking_speed.noise_right_TA_a_s = Results.right.noise.walking_speed_right.TA.asymetric_s;
+% Low noise - right TA
+Walking_speed.low_noise_right_TA_s_f = Results.right.low_noise.walking_speed_right.TA.symetric_f;
+Walking_speed.low_noise_right_TA_a_f = Results.right.low_noise.walking_speed_right.TA.asymetric_f;
+Walking_speed.low_noise_right_TA_s_s = Results.right.low_noise.walking_speed_right.TA.symetric_s;
+Walking_speed.low_noise_right_TA_a_s = Results.right.low_noise.walking_speed_right.TA.asymetric_s;
 
 % Noise - left HAM
 Walking_speed.noise_left_HAM_s_f = Results.left.noise.walking_speed_left.HAM.symetric_f;
 Walking_speed.noise_left_HAM_a_f = Results.left.noise.walking_speed_left.HAM.asymetric_f;
 Walking_speed.noise_left_HAM_s_s = Results.left.noise.walking_speed_left.HAM.symetric_s;
 Walking_speed.noise_left_HAM_a_s = Results.left.noise.walking_speed_left.HAM.asymetric_s;
+% Low noise - left HAM
+Walking_speed.low_noise_left_HAM_s_f = Results.left.low_noise.walking_speed_left.HAM.symetric_f;
+Walking_speed.low_noise_left_HAM_a_f = Results.left.low_noise.walking_speed_left.HAM.asymetric_f;
+Walking_speed.low_noise_left_HAM_s_s = Results.left.low_noise.walking_speed_left.HAM.symetric_s;
+Walking_speed.low_noise_left_HAM_a_s = Results.left.low_noise.walking_speed_left.HAM.asymetric_s;
 % Noise - right HAM
 Walking_speed.noise_right_HAM_s_f = Results.right.noise.walking_speed_right.HAM.symetric_f;
 Walking_speed.noise_right_HAM_a_f = Results.right.noise.walking_speed_right.HAM.asymetric_f;
 Walking_speed.noise_right_HAM_s_s = Results.right.noise.walking_speed_right.HAM.symetric_s;
 Walking_speed.noise_right_HAM_a_s = Results.right.noise.walking_speed_right.HAM.asymetric_s;
+% Low noise - right HAM
+Walking_speed.low_noise_right_HAM_s_f = Results.right.low_noise.walking_speed_right.HAM.symetric_f;
+Walking_speed.low_noise_right_HAM_a_f = Results.right.low_noise.walking_speed_right.HAM.asymetric_f;
+Walking_speed.low_noise_right_HAM_s_s = Results.right.low_noise.walking_speed_right.HAM.symetric_s;
+Walking_speed.low_noise_right_HAM_a_s = Results.right.low_noise.walking_speed_right.HAM.asymetric_s;
 
 %% Duration
 % No noise
@@ -333,21 +414,43 @@ Stride_duration.noise_left_TA_s_f = 1./ (Results.left.noise.mean_stride_freq.TA.
 Stride_duration.noise_left_TA_a_f = 1./(Results.left.noise.mean_stride_freq.TA.asymetric_f);
 Stride_duration.noise_left_TA_s_s = 1./(Results.left.noise.mean_stride_freq.TA.symetric_s);
 Stride_duration.noise_left_TA_a_s = 1./(Results.left.noise.mean_stride_freq.TA.asymetric_s);
+% Low noise - left TA
+Stride_duration.low_noise_left_TA_s_f = 1./ (Results.left.low_noise.mean_stride_freq.TA.symetric_f);
+Stride_duration.low_noise_left_TA_a_f = 1./(Results.left.low_noise.mean_stride_freq.TA.asymetric_f);
+Stride_duration.low_noise_left_TA_s_s = 1./(Results.left.low_noise.mean_stride_freq.TA.symetric_s);
+Stride_duration.low_noise_left_TA_a_s = 1./(Results.left.low_noise.mean_stride_freq.TA.asymetric_s);
 % Noise - right TA
 Stride_duration.noise_right_TA_s_f = 1./(Results.right.noise.mean_stride_freq.TA.symetric_f);
 Stride_duration.noise_right_TA_a_f = 1./(Results.right.noise.mean_stride_freq.TA.asymetric_f);
 Stride_duration.noise_right_TA_s_s = 1./(Results.right.noise.mean_stride_freq.TA.symetric_s);
 Stride_duration.noise_right_TA_a_s = 1./(Results.right.noise.mean_stride_freq.TA.asymetric_s);
+% Low noise - right TA
+Stride_duration.low_noise_right_TA_s_f = 1./(Results.right.low_noise.mean_stride_freq.TA.symetric_f);
+Stride_duration.low_noise_right_TA_a_f = 1./(Results.right.low_noise.mean_stride_freq.TA.asymetric_f);
+Stride_duration.low_noise_right_TA_s_s = 1./(Results.right.low_noise.mean_stride_freq.TA.symetric_s);
+Stride_duration.low_noise_right_TA_a_s = 1./(Results.right.low_noise.mean_stride_freq.TA.asymetric_s);
 
 % Noise - left HAM
 Stride_duration.noise_left_HAM_s_f = 1./(Results.left.noise.mean_stride_freq.HAM.symetric_f);
 Stride_duration.noise_left_HAM_a_f = 1./(Results.left.noise.mean_stride_freq.HAM.asymetric_f);
 Stride_duration.noise_left_HAM_s_s = 1./(Results.left.noise.mean_stride_freq.HAM.symetric_s);
 Stride_duration.noise_left_HAM_a_s = 1./(Results.left.noise.mean_stride_freq.HAM.asymetric_s);
+% Low noise - left HAM
+Stride_duration.low_noise_left_HAM_s_f = 1./(Results.left.low_noise.mean_stride_freq.HAM.symetric_f);
+Stride_duration.low_noise_left_HAM_a_f = 1./(Results.left.low_noise.mean_stride_freq.HAM.asymetric_f);
+Stride_duration.low_noise_left_HAM_s_s = 1./(Results.left.low_noise.mean_stride_freq.HAM.symetric_s);
+Stride_duration.low_noise_left_HAM_a_s = 1./(Results.left.low_noise.mean_stride_freq.HAM.asymetric_s);
 % Noise - right HAM
 Stride_duration.noise_right_HAM_s_f = 1./Results.right.noise.mean_stride_freq.HAM.symetric_f;
 Stride_duration.noise_right_HAM_a_f = 1./Results.right.noise.mean_stride_freq.HAM.asymetric_f;
 Stride_duration.noise_right_HAM_s_s = 1./Results.right.noise.mean_stride_freq.HAM.symetric_s;
 Stride_duration.noise_right_HAM_a_s = 1./Results.right.noise.mean_stride_freq.HAM.asymetric_s;
+% Low noise - right HAM
+Stride_duration.low_noise_right_HAM_s_f = 1./Results.right.low_noise.mean_stride_freq.HAM.symetric_f;
+Stride_duration.low_noise_right_HAM_a_f = 1./Results.right.low_noise.mean_stride_freq.HAM.asymetric_f;
+Stride_duration.low_noise_right_HAM_s_s = 1./Results.right.low_noise.mean_stride_freq.HAM.symetric_s;
+Stride_duration.low_noise_right_HAM_a_s = 1./Results.right.low_noise.mean_stride_freq.HAM.asymetric_s;
 
+%% Plots
+scatter([1,2,3],[Stride_length.no_noise_left,Stride_length.low_noise_left_TA_s_f,Stride_length.noise_left_TA_s_f]);
 

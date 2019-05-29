@@ -25,17 +25,17 @@ save('struct_mRFX_HAM_symetric_stimulation.mat','struct_mRFX_HAM_symetric_stimul
 struct_mRFX_HAM_asymetric_stimulation = mRFX;
 save('struct_mRFX_HAM_asymetric_stimulation.mat','struct_mRFX_HAM_asymetric_stimulation'); 
 %% Symetric feedback low noise
-struct_mRFX_HAM_symetric_feedback_low = mRFX;
-save('struct_mRFX_HAM_symetric_feedback_low.mat','struct_mRFX_HAM_symetric_feedback_low'); 
+struct_mRFX_HAM_symetric_feedback = mRFX;
+save('struct_mRFX_HAM_symetric_feedback.mat','struct_mRFX_HAM_symetric_feedback'); 
 
 %% Asymetric feedback low noise
-struct_mRFX_HAM_asymetric_feedback_low = mRFX;
-save('struct_mRFX_HAM_asymetric_feedback_low.mat','struct_mRFX_HAM_asymetric_feedback_low'); 
+struct_mRFX_HAM_asymetric_feedback = mRFX;
+save('struct_mRFX_HAM_asymetric_feedback.mat','struct_mRFX_HAM_asymetric_feedback'); 
 
-%% Symetric stimulation low noise
-struct_mRFX_HAM_symetric_stimulation_low = mRFX;
-save('struct_mRFX_HAM_symetric_stimulation_low.mat','struct_mRFX_HAM_symetric_stimulation_low'); 
+%% Symetric stimulation 
+struct_mRFX_HAM_symetric_stimulation = mRFX;
+save('struct_mRFX_HAM_symetric_stimulation.mat','struct_mRFX_HAM_symetric_stimulation'); 
 
-%% Asymetric stimulation low noise
-struct_mRFX_HAM_asymetric_stimulation_low = mRFX;
-save('struct_mRFX_HAM_asymetric_stimulation_low.mat','struct_mRFX_HAM_asymetric_stimulation_low'); 
+%% Asymetric stimulation
+struct_mRFX_HAM_asymetric_stimulation = mRFX;
+save('struct_mRFX_HAM_asymetric_stimulation.mat','struct_mRFX_HAM_asymetric_stimulation'); 
